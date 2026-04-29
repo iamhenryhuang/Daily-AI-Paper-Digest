@@ -2,6 +2,8 @@ const state = {
   entries: [],
   current: null,
   mode: "report",
+  markdown: "",
+  query: "",
 };
 
 const els = {
@@ -12,6 +14,7 @@ const els = {
   statusText: document.querySelector("#statusText"),
   reportTab: document.querySelector("#reportTab"),
   sourcesTab: document.querySelector("#sourcesTab"),
+  searchInput: document.querySelector("#searchInput"),
 };
 
 init();
@@ -24,7 +27,7 @@ async function init() {
     const manifest = await response.json();
     state.entries = [...manifest].sort((a, b) => b.date.localeCompare(a.date));
     if (!state.entries.length) {
-      showEmpty("目前還沒有簡報。");
+      showEmpty("目前沒有可讀取的論文資料。");
       return;
     }
     renderDates();
@@ -38,6 +41,10 @@ function bindEvents() {
   els.dateSelect.addEventListener("change", () => selectDate(els.dateSelect.value));
   els.reportTab.addEventListener("click", () => switchMode("report"));
   els.sourcesTab.addEventListener("click", () => switchMode("sources"));
+  els.searchInput.addEventListener("input", () => {
+    state.query = els.searchInput.value.trim();
+    renderCurrentDocument();
+  });
 }
 
 function renderDates() {
@@ -83,17 +90,82 @@ async function switchMode(mode) {
 async function loadCurrentDocument() {
   if (!state.current) return;
   const path = state.mode === "report" ? state.current.report : state.current.sources;
-  els.statusText.textContent = state.mode === "report" ? "正式簡報" : "評分來源";
-  els.content.innerHTML = "<p class=\"empty\">讀取中...</p>";
+  els.statusText.textContent = state.mode === "report" ? "讀取摘要中" : "讀取來源中";
+  els.content.innerHTML = '<p class="empty">讀取中...</p>';
 
   try {
     const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) throw new Error(`${path} ${response.status}`);
-    const markdown = await response.text();
-    els.content.innerHTML = renderMarkdown(markdown);
+    state.markdown = await response.text();
+    renderCurrentDocument();
   } catch (error) {
-    showEmpty(`讀取檔案失敗：${error.message}`);
+    state.markdown = "";
+    showEmpty(`讀取文件失敗：${error.message}`);
   }
+}
+
+function renderCurrentDocument() {
+  const result = filterMarkdown(state.markdown, state.query);
+  if (!result.markdown.trim()) {
+    els.content.innerHTML = `<p class="empty">沒有找到「${escapeHtml(state.query)}」相關內容。</p>`;
+  } else {
+    els.content.innerHTML = renderMarkdown(result.markdown, state.query);
+  }
+
+  const modeText = state.mode === "report" ? "摘要" : "來源";
+  if (state.query) {
+    els.statusText.textContent = `${modeText}，${result.count} 筆符合「${state.query}」`;
+  } else {
+    els.statusText.textContent = modeText;
+  }
+}
+
+function filterMarkdown(markdown, query) {
+  if (!query) return { markdown, count: 0 };
+
+  const normalizedQuery = query.toLowerCase();
+  const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+  const matches = [];
+  let count = 0;
+
+  for (let i = 0; i < lines.length; i += 1) {
+    if (isTableStart(lines, i)) {
+      const tableLines = [lines[i], lines[i + 1]];
+      i += 2;
+
+      while (i < lines.length && lines[i].includes("|") && lines[i].trim()) {
+        if (lines[i].toLowerCase().includes(normalizedQuery)) {
+          tableLines.push(lines[i]);
+          count += 1;
+        }
+        i += 1;
+      }
+
+      if (tableLines.length > 2) matches.push(tableLines.join("\n"));
+      continue;
+    }
+
+    const block = [lines[i]];
+    while (i + 1 < lines.length && !isSearchBoundary(lines[i + 1]) && !isTableStart(lines, i + 1)) {
+      i += 1;
+      block.push(lines[i]);
+    }
+
+    const text = block.join("\n");
+    if (text.toLowerCase().includes(normalizedQuery)) {
+      matches.push(text);
+      count += 1;
+    }
+  }
+
+  return {
+    markdown: matches.join("\n\n"),
+    count,
+  };
+}
+
+function isSearchBoundary(line) {
+  return /^(#{1,3})\s+/.test(line) || /^\d+\.\s+\*\*/.test(line);
 }
 
 function showEmpty(message) {
@@ -102,7 +174,7 @@ function showEmpty(message) {
   els.content.innerHTML = `<p class="empty">${escapeHtml(message)}</p>`;
 }
 
-function renderMarkdown(markdown) {
+function renderMarkdown(markdown, query = "") {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
   const html = [];
   let paragraph = [];
@@ -112,7 +184,7 @@ function renderMarkdown(markdown) {
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
-    html.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`);
+    html.push(`<p>${inlineMarkdown(paragraph.join(" "), query)}</p>`);
     paragraph = [];
   };
 
@@ -154,7 +226,7 @@ function renderMarkdown(markdown) {
       flushParagraph();
       closeList();
       const level = heading[1].length;
-      html.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+      html.push(`<h${level}>${inlineMarkdown(heading[2], query)}</h${level}>`);
       continue;
     }
 
@@ -162,7 +234,7 @@ function renderMarkdown(markdown) {
       flushParagraph();
       closeList();
       const table = collectTable(lines, i);
-      html.push(renderTable(table.rows));
+      html.push(renderTable(table.rows, query));
       i = table.end;
       continue;
     }
@@ -177,7 +249,7 @@ function renderMarkdown(markdown) {
         html.push(`<${nextType}>`);
         listType = nextType;
       }
-      html.push(`<li>${inlineMarkdown((unordered || ordered)[1])}</li>`);
+      html.push(`<li>${inlineMarkdown((unordered || ordered)[1], query)}</li>`);
       continue;
     }
 
@@ -214,21 +286,32 @@ function splitTableRow(line) {
     .map((cell) => cell.trim());
 }
 
-function renderTable(rows) {
+function renderTable(rows, query) {
   if (!rows.length) return "";
   const [head, ...body] = rows;
-  const header = `<thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead>`;
+  const header = `<thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell, query)}</th>`).join("")}</tr></thead>`;
   const content = body
-    .map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join("")}</tr>`)
+    .map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell, query)}</td>`).join("")}</tr>`)
     .join("");
   return `<table>${header}<tbody>${content}</tbody></table>`;
 }
 
-function inlineMarkdown(value) {
-  return escapeHtml(value)
+function inlineMarkdown(value, query) {
+  return highlightQuery(escapeHtml(value), query)
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+
+function highlightQuery(html, query) {
+  if (!query) return html;
+  const escapedQuery = escapeRegExp(escapeHtml(query));
+  if (!escapedQuery) return html;
+  return html.replace(new RegExp(`(${escapedQuery})`, "gi"), '<mark>$1</mark>');
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function escapeHtml(value) {
