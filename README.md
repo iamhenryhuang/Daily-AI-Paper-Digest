@@ -1,6 +1,6 @@
 # Daily AI Paper Agent
 
-每天早上自動採集 AI 論文候選池，使用多訊號規則引擎篩選，再呼叫 Gemini 生成繁體中文論文解讀。
+每天早上自動採集 AI 論文候選池，使用多訊號規則引擎篩選，再呼叫 OpenAI API 生成繁體中文論文解讀。
 
 ## 資料採集
 
@@ -31,14 +31,14 @@
 
 輸出分兩層：
 
-- `重點關注`：預設最多 5 篇，達到較高門檻後由 Gemini 解讀。
+- `重點關注`：預設最多 5 篇，達到較高門檻後由 OpenAI 模型解讀。
 - `也值得關注`：預設最多 12 篇，只列標題、連結和入選理由。
 
 每期都會生成透明來源頁：`sources/YYYY-MM-DD.md`。你可以看到所有候選論文、分數、進入或被篩掉的理由。
 
 ## 解讀原則
 
-Gemini 只解讀已經被規則引擎選出的 `重點關注` 論文，prompt 會約束它遵循下面原則：
+OpenAI 模型只解讀已經被規則引擎選出的 `重點關注` 論文，prompt 會約束它遵循下面原則：
 
 - 先講問題，再講方案
 - 從業者視角，說明這和工程、產品、研究落地有什麼關係
@@ -66,7 +66,7 @@ Copy-Item .env.example .env
 `.env` 不會被 commit，因為 `.gitignore` 已經排除它。
 
 ```powershell
-$env:GEMINI_API_KEY="你的 Gemini API key"
+$env:OPENAI_API_KEY="你的 OpenAI API key"
 python scripts/daily_papers.py
 ```
 
@@ -83,7 +83,7 @@ python scripts/daily_papers.py --date 2026-04-29 --focus-count 5 --also-count 12
 3. 新增 secret：
 
 ```text
-GEMINI_API_KEY=你的 Gemini API key
+OPENAI_API_KEY=你的 OpenAI API key
 ```
 
 如果你想讓結果自動傳到 Discord，再新增一個 optional secret：
@@ -123,10 +123,16 @@ DISCORD_WEBHOOK_URL=你剛剛複製的 webhook URL
 
 ```yaml
 env:
-  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 ```
 
 這裡的 `env` 不是 repo 裡的 `.env` 檔，而是 Actions runner 當下的環境變數。腳本只需要讀環境變數，所以本機可以用 `.env` 或 shell 環境變數，GitHub Actions 則用 Secrets 注入。
+
+## OpenAI 費用粗估
+
+目前 workflow 預設 `--focus-count 5`，所以每天最多呼叫 OpenAI 5 次，每篇重點論文 1 次。`也值得關注` 和 `sources` 候選清單不會呼叫模型。
+
+以 `gpt-4o` 的文字價格粗估，如果每篇約 1,000-2,000 input tokens、300-600 output tokens，每天 5 篇大約是幾美分等級，通常每月約 1-3 美元上下。實際費用會依摘要長度、模型價格和 OpenAI 後台計費為準。
 
 ## 調整篩選範圍
 

@@ -22,9 +22,9 @@ from pathlib import Path
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
 HF_PAPERS_URL = "https://huggingface.co/papers"
-GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gpt-4o"
 DEFAULT_CATEGORIES = ("cs.AI", "cs.CL", "cs.LG", "cs.CV", "cs.MA", "cs.IR")
 
 TOP_INSTITUTIONS = (
@@ -137,7 +137,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--arxiv-results", type=int, default=120, help="How many arXiv results to inspect.")
     parser.add_argument("--focus-threshold", type=int, default=8, help="Minimum score for focus papers.")
     parser.add_argument("--also-threshold", type=int, default=4, help="Minimum score for also-watch papers.")
-    parser.add_argument("--model", default=os.getenv("GEMINI_MODEL", DEFAULT_MODEL), help="Gemini model name.")
+    parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", DEFAULT_MODEL), help="OpenAI model name.")
     parser.add_argument("--output-dir", default="reports", help="Directory for Markdown reports.")
     parser.add_argument("--sources-dir", default="sources", help="Directory for transparent source pages.")
     return parser.parse_args()
@@ -459,24 +459,33 @@ def select_papers(
     return focus, also
 
 
-def call_gemini(api_key: str, model: str, prompt: str) -> str:
-    url = GEMINI_ENDPOINT.format(model=urllib.parse.quote(model, safe="-_."))
-    url = f"{url}?key={urllib.parse.quote(api_key)}"
+def call_openai(api_key: str, model: str, prompt: str) -> str:
     payload = {
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"},
+        "model": model,
+        "input": prompt,
+        "temperature": 0.2,
+        "text": {"format": {"type": "json_object"}},
     }
     response_text = request_text(
-        url,
+        OPENAI_RESPONSES_URL,
         data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
         timeout=90,
     )
     response = json.loads(response_text)
+    if isinstance(response.get("output_text"), str):
+        return response["output_text"]
     try:
-        return response["candidates"][0]["content"]["parts"][0]["text"]
+        for item in response["output"]:
+            for content in item.get("content", []):
+                if content.get("type") in {"output_text", "text"} and isinstance(content.get("text"), str):
+                    return content["text"]
     except (KeyError, IndexError) as exc:
-        raise RuntimeError(f"Unexpected Gemini response: {response_text[:1000]}") from exc
+        raise RuntimeError(f"Unexpected OpenAI response: {response_text[:1000]}") from exc
+    raise RuntimeError(f"OpenAI response did not contain text output: {response_text[:1000]}")
 
 
 def summarize_paper(api_key: str, model: str, paper: Paper, score: ScoreBreakdown) -> dict[str, str]:
@@ -505,7 +514,7 @@ Score: {score.total}
 Score reasons: {"; ".join(score.reasons) or "N/A"}
 Abstract: {paper.summary}
 """.strip()
-    raw = call_gemini(api_key, model, prompt)
+    raw = call_openai(api_key, model, prompt)
     try:
         data = json.loads(raw)
     except json.JSONDecodeError:
@@ -518,7 +527,7 @@ Abstract: {paper.summary}
 def extract_json_object(raw: str) -> dict[str, object]:
     match = re.search(r"\{.*\}", raw, flags=re.DOTALL)
     if not match:
-        raise RuntimeError(f"Gemini did not return JSON: {raw[:500]}")
+        raise RuntimeError(f"OpenAI did not return JSON: {raw[:500]}")
     return json.loads(match.group(0))
 
 
@@ -537,7 +546,7 @@ def render_report(
         "",
         f"- 來源：arXiv API + Hugging Face Daily Papers",
         f"- 分類：{', '.join(categories)}",
-        f"- 摘要模型：Gemini `{model}`",
+        f"- 摘要模型：OpenAI `{model}`",
         f"- 透明來源頁：[{sources_path.name}](../sources/{sources_path.name})",
         "",
         "## 重點關注",
@@ -630,9 +639,9 @@ def escape_md(value: str) -> str:
 def main() -> int:
     args = parse_args()
     load_env_file()
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        print("GEMINI_API_KEY is required.", file=sys.stderr)
+        print("OPENAI_API_KEY is required.", file=sys.stderr)
         return 2
 
     report_date = dt.date.fromisoformat(args.date)
