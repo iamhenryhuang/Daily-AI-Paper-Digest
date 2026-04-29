@@ -69,9 +69,10 @@ def main() -> int:
 
 
 def github_blob_url(server_url: str, repository: str, branch: str, path: Path) -> str:
+    normalized_path = str(path).replace("\\", "/")
     if not repository:
-        return str(path).replace("\\", "/")
-    return f"{server_url}/{repository}/blob/{branch}/{str(path).replace('\\', '/')}"
+        return normalized_path
+    return f"{server_url}/{repository}/blob/{branch}/{normalized_path}"
 
 
 def extract_focus_titles(report_path: Path) -> list[str]:
