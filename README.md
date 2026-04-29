@@ -1,6 +1,6 @@
 # Daily AI Paper Agent
 
-每天早上自動採集 AI 論文候選池，使用多訊號規則引擎篩選，再呼叫 Gemini 生成面向從業者的論文解讀。
+每天早上自動採集 AI 論文候選池，使用多訊號規則引擎篩選，再呼叫 Gemini 生成繁體中文論文解讀。
 
 ## 資料採集
 
@@ -26,9 +26,8 @@
 | 社群熱度 | Hugging Face votes 按 1、20、50、100 四檔加分。 |
 | 頂會收錄 | 在 comment / journal ref / 摘要中匹配 ICLR、NeurIPS、ICML、ACL、CVPR 等頂會名稱。 |
 | 程式碼可用 | metadata 中出現 GitHub、source code、open source 等線索則加分。 |
-| 從業者相關性 | 標題/摘要包含 deployment、inference、Agent、RAG、latency、tool use、benchmark 等關鍵字則加分。 |
-| 學術影響力 | 對本地分數靠前的候選論文呼叫 Semantic Scholar，按引用數分檔加分。 |
-| 開源熱度 | metadata 中出現 GitHub Trending / trending repo 線索則加分。 |
+
+目前評分只使用上面 5 類訊號。arXiv 分類只用來建立候選池，不額外加分。
 
 輸出分兩層：
 
@@ -77,12 +76,6 @@ python scripts/daily_papers.py
 python scripts/daily_papers.py --date 2026-04-29 --focus-count 5 --also-count 12 --lookback-days 3
 ```
 
-如果你有 Semantic Scholar API key，可以提高引用資料請求穩定性：
-
-```powershell
-$env:SEMANTIC_SCHOLAR_API_KEY="你的 Semantic Scholar API key"
-```
-
 ## GitHub Actions 設定
 
 1. 把這個資料夾推到 GitHub repo。
@@ -91,12 +84,6 @@ $env:SEMANTIC_SCHOLAR_API_KEY="你的 Semantic Scholar API key"
 
 ```text
 GEMINI_API_KEY=你的 Gemini API key
-```
-
-可選 secret：
-
-```text
-SEMANTIC_SCHOLAR_API_KEY=你的 Semantic Scholar API key
 ```
 
 workflow 會每天 UTC 23:00 執行，也就是台北時間早上 7:00。執行後會把新的 `reports/*.md` 和 `sources/*.md` commit 回 repo。

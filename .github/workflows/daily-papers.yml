@@ -16,7 +16,6 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-2.5-flash
-      SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
       ARXIV_CATEGORIES: cs.AI,cs.CL,cs.LG,cs.CV,cs.MA,cs.IR
 
     steps:
@@ -35,7 +34,6 @@ jobs:
           --focus-count 5
           --also-count 12
           --arxiv-results 120
-          --semantic-scholar-limit 20
 
       - name: Commit report
         run: |

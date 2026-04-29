@@ -21,7 +21,6 @@ from pathlib import Path
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
 HF_PAPERS_URL = "https://huggingface.co/papers"
-S2_API_URL = "https://api.semanticscholar.org/graph/v1/paper/arXiv:{arxiv_id}"
 GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 DEFAULT_MODEL = "gemini-2.5-flash"
@@ -93,37 +92,7 @@ TOP_VENUES = (
     "colm",
 )
 
-PRACTITIONER_KEYWORDS = (
-    "agent",
-    "agents",
-    "rag",
-    "retrieval augmented",
-    "deployment",
-    "inference",
-    "serving",
-    "latency",
-    "throughput",
-    "distillation",
-    "quantization",
-    "alignment",
-    "safety",
-    "evaluation",
-    "benchmark",
-    "tool use",
-    "function calling",
-    "workflow",
-    "production",
-    "fine-tuning",
-    "finetuning",
-    "multimodal",
-    "reasoning",
-    "coding",
-    "data synthesis",
-    "long context",
-)
-
 CODE_KEYWORDS = ("github.com", "code is available", "source code", "open-source", "open source", "repository")
-GITHUB_TRENDING_KEYWORDS = ("github trending", "trending repository", "trending repo")
 
 
 @dataclass(frozen=True)
@@ -155,8 +124,6 @@ class ScoreBreakdown:
     total: int = 0
     reasons: list[str] = field(default_factory=list)
     hf_votes: int = 0
-    citation_count: int | None = None
-    semantic_scholar_url: str = ""
 
 
 def parse_args() -> argparse.Namespace:
@@ -169,7 +136,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--arxiv-results", type=int, default=120, help="How many arXiv results to inspect.")
     parser.add_argument("--focus-threshold", type=int, default=8, help="Minimum score for focus papers.")
     parser.add_argument("--also-threshold", type=int, default=4, help="Minimum score for also-watch papers.")
-    parser.add_argument("--semantic-scholar-limit", type=int, default=20, help="Top local candidates to enrich with citation counts. Use 0 to disable.")
     parser.add_argument("--model", default=os.getenv("GEMINI_MODEL", DEFAULT_MODEL), help="Gemini model name.")
     parser.add_argument("--output-dir", default="reports", help="Directory for Markdown reports.")
     parser.add_argument("--sources-dir", default="sources", help="Directory for transparent source pages.")
@@ -360,21 +326,8 @@ def parse_arxiv_date(value: str) -> dt.date:
     return dt.datetime.fromisoformat(value.replace("Z", "+00:00")).date()
 
 
-def score_papers(
-    papers: list[Paper],
-    hf_signals: dict[str, HFPaperSignal],
-    semantic_scholar_limit: int,
-) -> dict[str, ScoreBreakdown]:
-    scores = {paper.arxiv_id: score_paper(paper, hf_signals) for paper in papers}
-
-    if semantic_scholar_limit > 0:
-        candidates = sorted(papers, key=lambda item: scores[item.arxiv_id].total, reverse=True)[:semantic_scholar_limit]
-        for index, paper in enumerate(candidates, start=1):
-            enrich_with_semantic_scholar(paper, scores[paper.arxiv_id])
-            if index < len(candidates):
-                time.sleep(1)
-
-    return scores
+def score_papers(papers: list[Paper], hf_signals: dict[str, HFPaperSignal]) -> dict[str, ScoreBreakdown]:
+    return {paper.arxiv_id: score_paper(paper, hf_signals) for paper in papers}
 
 
 def score_paper(paper: Paper, hf_signals: dict[str, HFPaperSignal]) -> ScoreBreakdown:
@@ -408,20 +361,6 @@ def score_paper(paper: Paper, hf_signals: dict[str, HFPaperSignal]) -> ScoreBrea
     if any(keyword in haystack for keyword in CODE_KEYWORDS):
         add(score, 2, "提及程式碼可用")
 
-    matched_practical = sorted({keyword for keyword in PRACTITIONER_KEYWORDS if keyword in haystack})
-    if matched_practical:
-        add(score, min(4, len(matched_practical)), "從業者相關關鍵字：" + ", ".join(matched_practical[:6]))
-
-    if any(keyword in haystack for keyword in GITHUB_TRENDING_KEYWORDS):
-        add(score, 2, "提及 GitHub Trending")
-
-    if "cs.lg" in [category.lower() for category in paper.categories]:
-        add(score, 1, "核心機器學習分類")
-    if "cs.cl" in [category.lower() for category in paper.categories]:
-        add(score, 1, "核心自然語言處理分類")
-    if "cs.cv" in [category.lower() for category in paper.categories]:
-        add(score, 1, "核心電腦視覺分類")
-
     return score
 
 
@@ -440,33 +379,6 @@ def hf_vote_score(votes: int) -> int:
     if votes >= 1:
         return 1
     return 0
-
-
-def enrich_with_semantic_scholar(paper: Paper, score: ScoreBreakdown) -> None:
-    arxiv_id = base_arxiv_id(paper.arxiv_id)
-    url = S2_API_URL.format(arxiv_id=urllib.parse.quote(arxiv_id, safe="")) + "?fields=citationCount,url"
-    headers = {"User-Agent": "daily-ai-paper-agent/1.0"}
-    api_key = os.getenv("SEMANTIC_SCHOLAR_API_KEY")
-    if api_key:
-        headers["x-api-key"] = api_key
-    try:
-        raw = request_text(url, headers=headers, timeout=30)
-    except RuntimeError as exc:
-        score.reasons.append(f"Semantic Scholar 暫時無法使用：{short_error(exc)}")
-        return
-    data = json.loads(raw)
-    citation_count = int(data.get("citationCount") or 0)
-    score.citation_count = citation_count
-    score.semantic_scholar_url = str(data.get("url") or "")
-
-    if citation_count >= 500:
-        add(score, 4, f"Semantic Scholar 引用數：{citation_count}")
-    elif citation_count >= 100:
-        add(score, 3, f"Semantic Scholar 引用數：{citation_count}")
-    elif citation_count >= 20:
-        add(score, 2, f"Semantic Scholar 引用數：{citation_count}")
-    elif citation_count >= 5:
-        add(score, 1, f"Semantic Scholar 引用數：{citation_count}")
 
 
 def short_error(exc: Exception) -> str:
@@ -691,7 +603,7 @@ def main() -> int:
     hf_signals = fetch_hf_daily_papers()
 
     print("Scoring candidates...", file=sys.stderr)
-    scores = score_papers(candidates, hf_signals, args.semantic_scholar_limit)
+    scores = score_papers(candidates, hf_signals)
     focus, also = select_papers(
         candidates,
         scores,
