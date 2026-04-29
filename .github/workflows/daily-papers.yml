@@ -15,7 +15,6 @@ jobs:
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       OPENAI_MODEL: gpt-4o
       ARXIV_CATEGORIES: cs.AI,cs.CL,cs.LG,cs.CV,cs.MA,cs.IR
 
@@ -54,8 +53,3 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: add daily AI paper digest"
           git push
-
-      - name: Notify Discord
-        env:
-          REPORT_DATE: ${{ steps.report-date.outputs.date }}
-        run: python scripts/notify_discord.py
