@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paper Digest</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="eyebrow">Daily Research Notes</span>
+        <h1>Paper Digest</h1>
+        <p>每天留一份值得回看的論文筆記。</p>
+      </div>
+      <a class="repo-link" href="https://github.com/iamhenryhuang/Daily-AI-Paper-Digest">Repo</a>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-title">Archive</div>
+        <label for="dateSelect">選擇日期</label>
+        <select id="dateSelect"></select>
+        <nav id="dateList" class="date-list" aria-label="報告日期"></nav>
+      </aside>
+
+      <section class="reader">
+        <div class="reader-toolbar">
+          <div>
+            <div id="currentDate" class="current-date">載入中</div>
+            <div id="statusText" class="status-text">正在讀取簡報...</div>
+          </div>
+          <div class="tabs" role="tablist" aria-label="內容切換">
+            <button id="reportTab" class="tab active" type="button">簡報</button>
+            <button id="sourcesTab" class="tab" type="button">評分來源</button>
+          </div>
+        </div>
+        <article id="content" class="markdown"></article>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
