@@ -37,12 +37,15 @@ jobs:
           python scripts/daily_papers.py
           --date "${{ steps.report-date.outputs.date }}"
           --focus-count 5
-          --also-count 12
+          --also-count 3
           --arxiv-results 120
+
+      - name: Update site manifest
+        run: python scripts/update_manifest.py
 
       - name: Commit report
         run: |
-          git add reports/*.md sources/*.md
+          git add docs
           if git diff --cached --quiet; then
             echo "No report changes to commit."
             exit 0

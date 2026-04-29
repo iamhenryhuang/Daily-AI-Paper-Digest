@@ -8,6 +8,7 @@ import datetime as dt
 import html
 import json
 import os
+import random
 import re
 import socket
 import sys
@@ -132,14 +133,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Create a daily AI paper digest.")
     parser.add_argument("--date", default=today, help="Report date. Default: today in UTC.")
     parser.add_argument("--focus-count", type=int, default=5, help="Maximum papers in the focus section.")
-    parser.add_argument("--also-count", type=int, default=12, help="Maximum papers in the also-watch section.")
+    parser.add_argument("--also-count", type=int, default=3, help="Maximum papers in the also-watch section.")
     parser.add_argument("--lookback-days", type=int, default=3, help="Only keep arXiv papers published within this window.")
     parser.add_argument("--arxiv-results", type=int, default=120, help="How many arXiv results to inspect.")
     parser.add_argument("--focus-threshold", type=int, default=8, help="Minimum score for focus papers.")
     parser.add_argument("--also-threshold", type=int, default=4, help="Minimum score for also-watch papers.")
     parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", DEFAULT_MODEL), help="OpenAI model name.")
-    parser.add_argument("--output-dir", default="reports", help="Directory for Markdown reports.")
-    parser.add_argument("--sources-dir", default="sources", help="Directory for transparent source pages.")
+    parser.add_argument("--output-dir", default="docs/reports", help="Directory for Markdown reports.")
+    parser.add_argument("--sources-dir", default="docs/sources", help="Directory for transparent source pages.")
     return parser.parse_args()
 
 
@@ -437,12 +438,9 @@ def select_papers(
     also_threshold: int,
     focus_count: int,
     also_count: int,
+    random_seed: str,
 ) -> tuple[list[Paper], list[Paper]]:
-    ranked = sorted(
-        papers,
-        key=lambda paper: (scores[paper.arxiv_id].total, scores[paper.arxiv_id].hf_votes, paper.published),
-        reverse=True,
-    )
+    ranked = rank_papers_by_score(papers, scores, random_seed)
     focus = [paper for paper in ranked if scores[paper.arxiv_id].total >= focus_threshold][:focus_count]
     focus_ids = {paper.arxiv_id for paper in focus}
     also = [
@@ -457,6 +455,24 @@ def select_papers(
         also = [paper for paper in ranked if paper.arxiv_id not in focus_ids][:also_count]
 
     return focus, also
+
+
+def rank_papers_by_score(
+    papers: list[Paper],
+    scores: dict[str, ScoreBreakdown],
+    random_seed: str,
+) -> list[Paper]:
+    rng = random.Random(random_seed)
+    groups: dict[int, list[Paper]] = {}
+    for paper in papers:
+        groups.setdefault(scores[paper.arxiv_id].total, []).append(paper)
+
+    ranked: list[Paper] = []
+    for score in sorted(groups.keys(), reverse=True):
+        tied = groups[score]
+        rng.shuffle(tied)
+        ranked.extend(tied)
+    return ranked
 
 
 def call_openai(api_key: str, model: str, prompt: str) -> str:
@@ -498,11 +514,12 @@ def summarize_paper(api_key: str, model: str, paper: Paper, score: ScoreBreakdow
 3. 保持克制，不把所有東西都稱為突破；不確定處明確寫「摘要未明確說明」。
 4. 不編造結果、機構、程式碼連結或會議接收資訊。
 5. research_gap 要提出讀者可以繼續思考的研究缺口、限制或後續問題；若摘要資訊不足，請明確標註不確定。
+6. 請比一般摘要多提供細節：method 要說清楚核心方法或流程，result 要交代摘要中明確提到的實驗發現，conclusion 要總結這篇論文的價值與限制。
 
 請只輸出 JSON object，不要 Markdown，不要額外說明。JSON 欄位固定為：
 intro, motivation, method, result, conclusion, research_gap。
 
-每個欄位請用繁體中文，2-4 句。
+每個欄位請用繁體中文，4-6 句。句子可以稍微具體，但不要超出摘要可支持的資訊。
 
 Title: {paper.title}
 Authors: {", ".join(paper.authors)}
@@ -668,6 +685,7 @@ def main() -> int:
         args.also_threshold,
         args.focus_count,
         args.also_count,
+        args.date,
     )
 
     summaries: dict[str, dict[str, str]] = {}

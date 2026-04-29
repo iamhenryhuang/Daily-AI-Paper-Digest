@@ -24,8 +24,8 @@ def main() -> int:
     server_url = os.getenv("GITHUB_SERVER_URL", "https://github.com")
     run_url = f"{server_url}/{repository}/actions/runs/{os.getenv('GITHUB_RUN_ID', '')}" if repository else ""
 
-    report_path = Path("reports") / f"{report_date}.md"
-    sources_path = Path("sources") / f"{report_date}.md"
+    report_path = Path("docs") / "reports" / f"{report_date}.md"
+    sources_path = Path("docs") / "sources" / f"{report_date}.md"
     report_url = github_blob_url(server_url, repository, branch, report_path)
     sources_url = github_blob_url(server_url, repository, branch, sources_path)
 
