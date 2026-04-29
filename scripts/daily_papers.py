@@ -496,10 +496,11 @@ def summarize_paper(api_key: str, model: str, paper: Paper, score: ScoreBreakdow
 1. 先講問題，再講方案，讓讀者先理解為什麼這件事重要。
 2. 使用從業者視角，重點說明這跟工程、產品、研究落地有什麼關係。
 3. 保持克制，不把所有東西都稱為突破；不確定處明確寫「摘要未明確說明」。
-4. 不編造 benchmark、結果、機構、程式碼連結或會議接收資訊。
+4. 不編造結果、機構、程式碼連結或會議接收資訊。
+5. research_gap 要提出讀者可以繼續思考的研究缺口、限制或後續問題；若摘要資訊不足，請明確標註不確定。
 
 請只輸出 JSON object，不要 Markdown，不要額外說明。JSON 欄位固定為：
-intro, motivation, solution, benchmark, result。
+intro, motivation, method, result, conclusion, research_gap。
 
 每個欄位請用繁體中文，2-4 句。
 
@@ -520,7 +521,7 @@ Abstract: {paper.summary}
     except json.JSONDecodeError:
         data = extract_json_object(raw)
 
-    expected = ("intro", "motivation", "solution", "benchmark", "result")
+    expected = ("intro", "motivation", "method", "result", "conclusion", "research_gap")
     return {key: normalize_space(str(data.get(key, "摘要未明確說明。"))) for key in expected}
 
 
@@ -589,11 +590,13 @@ def render_paper_summary(index: int, paper: Paper, summary: dict[str, str], scor
         "",
         f"**Motivation:** {summary['motivation']}",
         "",
-        f"**Solution:** {summary['solution']}",
-        "",
-        f"**Benchmark:** {summary['benchmark']}",
+        f"**Method:** {summary['method']}",
         "",
         f"**Result:** {summary['result']}",
+        "",
+        f"**Conclusion:** {summary['conclusion']}",
+        "",
+        f"**Research Gap:** {summary['research_gap']}",
         "",
     ]
 

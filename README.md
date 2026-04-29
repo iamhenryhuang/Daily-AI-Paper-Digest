@@ -43,15 +43,17 @@ OpenAI 模型只解讀已經被規則引擎選出的 `重點關注` 論文，pro
 - 先講問題，再講方案
 - 從業者視角，說明這和工程、產品、研究落地有什麼關係
 - 保持克制，不把所有內容都寫成「突破」
-- 不編造 benchmark、結果、機構、程式碼連結或會議接收資訊
+- 不編造結果、機構、程式碼連結或會議接收資訊
+- 補出 research gap，讓讀者可以思考限制、缺口或後續研究方向
 
 每篇解讀包含固定欄位：
 
 - intro
 - motivation
-- solution
-- benchmark
+- method
 - result
+- conclusion
+- research_gap
 
 ## 本機執行
 
