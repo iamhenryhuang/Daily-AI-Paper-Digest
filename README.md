@@ -86,7 +86,36 @@ python scripts/daily_papers.py --date 2026-04-29 --focus-count 5 --also-count 12
 GEMINI_API_KEY=你的 Gemini API key
 ```
 
+如果你想讓結果自動傳到 Discord，再新增一個 optional secret：
+
+```text
+DISCORD_WEBHOOK_URL=你的 Discord webhook URL
+```
+
 workflow 會每天 UTC 23:00 執行，也就是台北時間早上 7:00。執行後會把新的 `reports/*.md` 和 `sources/*.md` commit 回 repo。
+如果有設定 `DISCORD_WEBHOOK_URL`，也會傳 Discord 通知，內容包含本期重點關注標題、正式簡報連結、來源評分頁連結和 Action 執行紀錄連結。
+
+## 怎麼看結果？
+
+你有三種方式可以看：
+
+1. GitHub repo 裡看：打開 `reports/YYYY-MM-DD.md`，這是正式簡報。
+2. 看評分透明頁：打開 `sources/YYYY-MM-DD.md`，可以看到候選論文、分數和入選理由。
+3. Discord 通知：設定 `DISCORD_WEBHOOK_URL` 後，Action 跑完會自動把連結推到你指定的 Discord 頻道。
+
+## Discord Webhook 設定
+
+1. 到 Discord 伺服器，選你要接收通知的頻道。
+2. 進入 `Edit Channel` -> `Integrations` -> `Webhooks`。
+3. 建立一個 webhook，複製 Webhook URL。
+4. 到 GitHub repo 的 `Settings` -> `Secrets and variables` -> `Actions`。
+5. 新增 repository secret：
+
+```text
+DISCORD_WEBHOOK_URL=你剛剛複製的 webhook URL
+```
+
+這個 URL 跟 API key 一樣，不要寫進公開檔案，也不要直接貼在 workflow 裡。
 
 ## 為什麼 GitHub Actions 用 env，不用 .env？
 

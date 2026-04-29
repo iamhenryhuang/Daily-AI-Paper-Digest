@@ -9,6 +9,7 @@ import html
 import json
 import os
 import re
+import socket
 import sys
 import time
 import urllib.error
@@ -172,29 +173,73 @@ def build_arxiv_query(categories: tuple[str, ...]) -> str:
     return f"({category_query}) AND ({ai_terms})"
 
 
-def request_text(url: str, *, data: bytes | None = None, headers: dict[str, str] | None = None, timeout: int = 60) -> str:
+def request_text(
+    url: str,
+    *,
+    data: bytes | None = None,
+    headers: dict[str, str] | None = None,
+    timeout: int = 60,
+    retries: int = 3,
+) -> str:
     request = urllib.request.Request(url, data=data, headers=headers or {})
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return response.read().decode("utf-8")
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"HTTP {exc.code} from {url}: {body[:800]}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"Network error calling {url}: {exc}") from exc
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return response.read().decode("utf-8")
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            if exc.code not in {429, 500, 502, 503, 504} or attempt == retries:
+                raise RuntimeError(f"HTTP {exc.code} from {url}: {body[:800]}") from exc
+            last_error = exc
+        except (urllib.error.URLError, TimeoutError, socket.timeout) as exc:
+            if attempt == retries:
+                raise RuntimeError(f"Network error calling {url}: {exc}") from exc
+            last_error = exc
+
+        wait_seconds = min(30, 2 ** attempt)
+        print(f"Request failed, retrying in {wait_seconds}s ({attempt}/{retries}): {last_error}", file=sys.stderr)
+        time.sleep(wait_seconds)
+
+    raise RuntimeError(f"Network error calling {url}: {last_error}")
 
 
 def fetch_arxiv_papers(categories: tuple[str, ...], max_results: int) -> list[Paper]:
-    params = {
-        "search_query": build_arxiv_query(categories),
-        "start": "0",
-        "max_results": str(max_results),
-        "sortBy": "submittedDate",
-        "sortOrder": "descending",
-    }
-    url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
-    xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"})
-    return parse_arxiv_feed(xml_text)
+    per_category = max(10, (max_results + len(categories) - 1) // len(categories))
+    papers: list[Paper] = []
+    seen: set[str] = set()
+    errors: list[str] = []
+
+    for index, category in enumerate(categories, start=1):
+        params = {
+            "search_query": build_arxiv_query((category,)),
+            "start": "0",
+            "max_results": str(per_category),
+            "sortBy": "submittedDate",
+            "sortOrder": "descending",
+        }
+        url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
+        print(f"Fetching arXiv category {index}/{len(categories)}: {category}", file=sys.stderr)
+        try:
+            xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=4)
+        except RuntimeError as exc:
+            errors.append(f"{category}: {short_error(exc)}")
+            print(f"Warning: failed to fetch arXiv category {category}: {exc}", file=sys.stderr)
+            continue
+
+        for paper in parse_arxiv_feed(xml_text):
+            paper_id = base_arxiv_id(paper.arxiv_id)
+            if paper_id not in seen:
+                papers.append(paper)
+                seen.add(paper_id)
+
+        if index < len(categories):
+            time.sleep(3)
+
+    if not papers:
+        raise RuntimeError("Failed to fetch arXiv candidates. " + " | ".join(errors))
+
+    return sorted(papers, key=lambda paper: paper.published, reverse=True)[:max_results]
 
 
 def parse_arxiv_feed(xml_text: str) -> list[Paper]:
