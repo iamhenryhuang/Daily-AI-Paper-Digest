@@ -1,0 +1,50 @@
+name: Daily AI Paper Digest
+
+on:
+  schedule:
+    # 07:00 Asia/Taipei
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-papers:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: gemini-2.5-flash
+      SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+      ARXIV_CATEGORIES: cs.AI,cs.CL,cs.LG,cs.CV,cs.MA,cs.IR
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate digest
+        run: >
+          python scripts/daily_papers.py
+          --date "$(TZ=Asia/Taipei date +%F)"
+          --focus-count 5
+          --also-count 12
+          --arxiv-results 120
+          --semantic-scholar-limit 20
+
+      - name: Commit report
+        run: |
+          git add reports/*.md sources/*.md
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: add daily AI paper digest"
+          git push
