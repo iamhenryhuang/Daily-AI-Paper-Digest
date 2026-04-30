@@ -6,8 +6,6 @@ const state = {
   mode: "report",
   markdown: "",
   query: "",
-  activeTag: "",
-  tags: [],
   favorites: loadFavorites(),
   showFavorites: false,
 };
@@ -21,7 +19,6 @@ const els = {
   reportTab: document.querySelector("#reportTab"),
   sourcesTab: document.querySelector("#sourcesTab"),
   searchInput: document.querySelector("#searchInput"),
-  tagFilters: document.querySelector("#tagFilters"),
   favoritesToggle: document.querySelector("#favoritesToggle"),
 };
 
@@ -111,38 +108,10 @@ async function loadCurrentDocument() {
     const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) throw new Error(`${path} ${response.status}`);
     state.markdown = await response.text();
-    state.tags = extractTags(state.markdown);
-    if (state.activeTag && !state.tags.includes(state.activeTag)) {
-      state.activeTag = "";
-    }
-    renderTagFilters();
     renderCurrentDocument();
   } catch (error) {
     state.markdown = "";
-    state.tags = [];
-    state.activeTag = "";
-    renderTagFilters();
     showEmpty(`讀取文件失敗：${error.message}`);
-  }
-}
-
-function renderTagFilters() {
-  els.tagFilters.innerHTML = "";
-  els.tagFilters.hidden = state.tags.length === 0;
-  if (!state.tags.length) return;
-
-  for (const tag of state.tags) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "tag-filter";
-    button.classList.toggle("active", state.activeTag === tag);
-    button.textContent = tag;
-    button.addEventListener("click", () => {
-      state.activeTag = state.activeTag === tag ? "" : tag;
-      renderTagFilters();
-      renderCurrentDocument();
-    });
-    els.tagFilters.append(button);
   }
 }
 
@@ -152,11 +121,10 @@ function renderFavoriteToggle() {
 }
 
 function renderCurrentDocument() {
-  const result = filterMarkdown(state.markdown, state.query, state.activeTag, state.showFavorites);
+  const result = filterMarkdown(state.markdown, state.query, state.showFavorites);
   if (!result.markdown.trim()) {
     const label = [
       state.query && `「${escapeHtml(state.query)}」`,
-      state.activeTag && `#${escapeHtml(state.activeTag)}`,
       state.showFavorites && "收藏",
     ]
       .filter(Boolean)
@@ -168,10 +136,9 @@ function renderCurrentDocument() {
   }
 
   const modeText = state.mode === "report" ? "摘要" : "來源";
-  if (state.query || state.activeTag || state.showFavorites) {
+  if (state.query || state.showFavorites) {
     const filters = [
       state.query && `「${state.query}」`,
-      state.activeTag && `#${state.activeTag}`,
       state.showFavorites && "收藏",
     ]
       .filter(Boolean)
@@ -214,7 +181,7 @@ function createFavoriteButton(paper) {
   button.title = state.favorites[paper.id] ? "取消收藏" : "收藏論文";
   button.setAttribute("aria-label", button.title);
   button.setAttribute("aria-pressed", String(Boolean(state.favorites[paper.id])));
-  button.textContent = state.favorites[paper.id] ? "已收藏" : "收藏";
+  button.textContent = state.favorites[paper.id] ? "★" : "☆";
   button.addEventListener("click", () => toggleFavorite(paper.id, paper));
   return button;
 }
@@ -260,7 +227,7 @@ function basePaperId(id) {
 }
 
 function cleanTitle(value) {
-  return value.replace(/^(收藏|已收藏)\s*/, "").replace(/^\d+\.\s*/, "").trim();
+  return value.replace(/^[★☆]\s*/, "").replace(/^\d+\.\s*/, "").trim();
 }
 
 function loadFavorites() {
@@ -279,36 +246,10 @@ function saveFavorites() {
   }
 }
 
-function extractTags(markdown) {
-  const tags = new Set();
-  const tagLine = /^\s*-\s*Tags:\s*(.+)$/gim;
-  for (const match of markdown.matchAll(tagLine)) {
-    addTags(tags, match[1]);
-  }
-
-  const rows = markdown.replace(/\r\n/g, "\n").split("\n");
-  for (const row of rows) {
-    if (!row.includes("|")) continue;
-    const cells = splitTableRow(row);
-    if (cells.length < 3 || cells[2].toLowerCase() === "tags" || /^:?-{3,}:?$/.test(cells[2])) continue;
-    addTags(tags, cells[2]);
-  }
-
-  return [...tags].sort((a, b) => a.localeCompare(b));
-}
-
-function addTags(tags, raw) {
-  for (const tag of raw.split(",")) {
-    const normalized = tag.trim();
-    if (normalized) tags.add(normalized);
-  }
-}
-
-function filterMarkdown(markdown, query, activeTag = "", onlyFavorites = false) {
-  if (!query && !activeTag && !onlyFavorites) return { markdown, count: 0 };
+function filterMarkdown(markdown, query, onlyFavorites = false) {
+  if (!query && !onlyFavorites) return { markdown, count: 0 };
 
   const normalizedQuery = query.toLowerCase();
-  const normalizedTag = activeTag.toLowerCase();
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
   const matches = [];
   let count = 0;
@@ -320,7 +261,7 @@ function filterMarkdown(markdown, query, activeTag = "", onlyFavorites = false) 
 
       while (i < lines.length && lines[i].includes("|") && lines[i].trim()) {
         const rowText = lines[i].toLowerCase();
-        if (matchesFilters(rowText, normalizedQuery, normalizedTag, onlyFavorites)) {
+        if (matchesFilters(rowText, normalizedQuery, onlyFavorites)) {
           tableLines.push(lines[i]);
           count += 1;
         }
@@ -338,7 +279,7 @@ function filterMarkdown(markdown, query, activeTag = "", onlyFavorites = false) 
     }
 
     const text = block.join("\n");
-    if (matchesFilters(text.toLowerCase(), normalizedQuery, normalizedTag, onlyFavorites)) {
+    if (matchesFilters(text.toLowerCase(), normalizedQuery, onlyFavorites)) {
       matches.push(text);
       count += 1;
     }
@@ -350,11 +291,10 @@ function filterMarkdown(markdown, query, activeTag = "", onlyFavorites = false) 
   };
 }
 
-function matchesFilters(text, normalizedQuery, normalizedTag, onlyFavorites) {
+function matchesFilters(text, normalizedQuery, onlyFavorites) {
   const queryMatch = !normalizedQuery || text.includes(normalizedQuery);
-  const tagMatch = !normalizedTag || ((text.includes("tags:") || text.includes("|")) && text.includes(normalizedTag));
   const favoriteMatch = !onlyFavorites || favoriteIdsInText(text).some((id) => state.favorites[id]);
-  return queryMatch && tagMatch && favoriteMatch;
+  return queryMatch && favoriteMatch;
 }
 
 function favoriteIdsInText(text) {

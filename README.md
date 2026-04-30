@@ -19,7 +19,7 @@
 
 輸出分兩層：
 
-- `重點關注`：最多 5 篇，會用 OpenAI 解讀
+- `重點關注`：最多 5 篇，會下載 PDF 並用 OpenAI 做全文解讀
 - `也值得關注`：最多 3 篇，只列連結和入選理由
 
 同分時會隨機排序再取上限；同一天重跑會保持同一組結果。
@@ -42,7 +42,7 @@
 1. 抓 arXiv 和 Hugging Face Daily Papers
 2. 對候選論文打分
 3. 選出重點關注和也值得關注
-4. 呼叫 OpenAI 分析重點論文
+4. 下載重點論文 PDF、抽取全文並呼叫 OpenAI 分析
 5. 產生 Markdown 結果
 6. 更新靜態閱讀器的 manifest
 7. commit 回 repo
@@ -79,8 +79,8 @@ python scripts/daily_papers.py --focus-count 5 --also-count 3 --lookback-days 3
 可在 `.env` 或 workflow 裡調整：
 
 ```text
-OPENAI_MODEL=gpt-4o
+OPENAI_MODEL=gpt-4.1-mini
 ARXIV_CATEGORIES=cs.AI,cs.CL,cs.LG,cs.CV,cs.MA,cs.IR
 ```
 
-預設每天最多呼叫 OpenAI 5 次，每篇重點論文 1 次。`也值得關注` 和 `sources` 不會呼叫模型。
+預設模型是 `gpt-4.1-mini`。每天最多呼叫 OpenAI 5 次，每篇重點論文 1 次；`也值得關注` 和 `sources` 不會呼叫模型，也不會下載 PDF。PDF 抽取文字會快取在 `.cache/papers`。

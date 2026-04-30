@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import html
+import io
 import json
 import os
 import random
@@ -25,8 +26,10 @@ ARXIV_API_URL = "https://export.arxiv.org/api/query"
 HF_PAPERS_URL = "https://huggingface.co/papers"
 OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
 
-DEFAULT_MODEL = "gpt-4o"
+DEFAULT_MODEL = "gpt-4.1-mini"
 DEFAULT_CATEGORIES = ("cs.AI", "cs.CL", "cs.LG", "cs.CV", "cs.MA", "cs.IR")
+DEFAULT_PAPER_CACHE_DIR = ".cache/papers"
+DEFAULT_FULL_TEXT_CHARS = 120_000
 
 TOP_INSTITUTIONS = (
     "google",
@@ -96,26 +99,6 @@ TOP_VENUES = (
 
 CODE_KEYWORDS = ("github.com", "code is available", "source code", "open-source", "open source", "repository")
 
-TAG_RULES = (
-    ("LLM", ("large language model", "llm", "language model", "gpt", "transformer")),
-    ("NLP", ("natural language", "nlp", "text", "language", "translation", "summarization", "question answering")),
-    ("Vision", ("computer vision", "vision-language", "image", "video", "segmentation", "detection", "visual")),
-    ("Agent", ("agent", "agents", "multi-agent", "agentic")),
-    ("RAG", ("retrieval augmented", "retrieval-augmented", "rag", "retrieval")),
-    ("Recommendation", ("recommendation", "recommender", "ranking", "reranking", "re-ranking")),
-    ("Safety", ("safety", "alignment", "jailbreak", "hallucination", "privacy", "security")),
-)
-
-CATEGORY_TAGS = {
-    "cs.CL": "NLP",
-    "cs.CV": "Vision",
-    "cs.IR": "RAG",
-    "cs.MA": "Agent",
-}
-
-MAX_TAGS_PER_PAPER = 3
-
-
 @dataclass(frozen=True)
 class Paper:
     arxiv_id: str
@@ -147,6 +130,12 @@ class ScoreBreakdown:
     hf_votes: int = 0
 
 
+@dataclass(frozen=True)
+class PaperText:
+    text: str
+    source: str
+
+
 def parse_args() -> argparse.Namespace:
     today = dt.datetime.now(dt.timezone.utc).date().isoformat()
     parser = argparse.ArgumentParser(description="Create a daily AI paper digest.")
@@ -171,6 +160,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", DEFAULT_MODEL), help="OpenAI model name.")
     parser.add_argument("--output-dir", default="docs/reports", help="Directory for Markdown reports.")
     parser.add_argument("--sources-dir", default="docs/sources", help="Directory for transparent source pages.")
+    parser.add_argument("--paper-cache-dir", default=DEFAULT_PAPER_CACHE_DIR, help="Directory for cached PDF text.")
+    parser.add_argument(
+        "--full-text-chars",
+        type=int,
+        default=DEFAULT_FULL_TEXT_CHARS,
+        help="Maximum extracted PDF characters to send to the model per focus paper.",
+    )
     return parser.parse_args()
 
 
@@ -218,6 +214,36 @@ def request_text(
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 return response.read().decode("utf-8")
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            if exc.code not in {429, 500, 502, 503, 504} or attempt == retries:
+                raise RuntimeError(f"HTTP {exc.code} from {url}: {body[:800]}") from exc
+            last_error = exc
+        except (urllib.error.URLError, TimeoutError, socket.timeout) as exc:
+            if attempt == retries:
+                raise RuntimeError(f"Network error calling {url}: {exc}") from exc
+            last_error = exc
+
+        wait_seconds = min(30, 2 ** attempt)
+        print(f"Request failed, retrying in {wait_seconds}s ({attempt}/{retries}): {last_error}", file=sys.stderr)
+        time.sleep(wait_seconds)
+
+    raise RuntimeError(f"Network error calling {url}: {last_error}")
+
+
+def request_bytes(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    timeout: int = 60,
+    retries: int = 3,
+) -> bytes:
+    request = urllib.request.Request(url, headers=headers or {})
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return response.read()
         except urllib.error.HTTPError as exc:
             body = exc.read().decode("utf-8", errors="replace")
             if exc.code not in {429, 500, 502, 503, 504} or attempt == retries:
@@ -496,37 +522,6 @@ def score_paper(paper: Paper, hf_signals: dict[str, HFPaperSignal]) -> ScoreBrea
     return score
 
 
-def paper_tags(paper: Paper) -> list[str]:
-    tags: list[str] = []
-    seen: set[str] = set()
-
-    def add_tag(tag: str) -> None:
-        if tag not in seen:
-            tags.append(tag)
-            seen.add(tag)
-
-    for category in paper.categories:
-        tag = CATEGORY_TAGS.get(category)
-        if tag:
-            add_tag(tag)
-
-    haystack = " ".join(
-        [
-            paper.title,
-            paper.summary,
-            paper.comment,
-            paper.journal_ref,
-            " ".join(paper.categories),
-        ]
-    ).lower()
-
-    for tag, keywords in TAG_RULES:
-        if any(keyword in haystack for keyword in keywords):
-            add_tag(tag)
-
-    return (tags or ["AI"])[:MAX_TAGS_PER_PAPER]
-
-
 def add(score: ScoreBreakdown, points: int, reason: str) -> None:
     score.total += points
     score.reasons.append(f"+{points} {reason}")
@@ -592,6 +587,73 @@ def rank_papers_by_score(
     return ranked
 
 
+def load_paper_text(paper: Paper, cache_dir: Path, max_chars: int) -> PaperText:
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"{safe_cache_name(base_arxiv_id(paper.arxiv_id))}.txt"
+    if cache_path.exists():
+        cached = cache_path.read_text(encoding="utf-8")
+        if cached.strip():
+            return PaperText(text=limit_full_text(cached, max_chars), source="PDF text cache")
+
+    try:
+        pdf_bytes = request_bytes(
+            paper.pdf_url,
+            headers={"User-Agent": "daily-ai-paper-agent/1.0"},
+            timeout=120,
+            retries=3,
+        )
+        text_content = extract_pdf_text(pdf_bytes)
+        if not text_content.strip():
+            raise RuntimeError("PDF text extraction returned empty text")
+        cache_path.write_text(text_content, encoding="utf-8")
+        return PaperText(text=limit_full_text(text_content, max_chars), source="PDF full text")
+    except Exception as exc:
+        print(f"Warning: failed to load PDF text for {paper.arxiv_id}: {exc}", file=sys.stderr)
+        return PaperText(text=paper.summary, source=f"abstract fallback ({short_error(exc)})")
+
+
+def extract_pdf_text(pdf_bytes: bytes) -> str:
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        raise RuntimeError("Missing dependency: install pypdf to enable full-paper reviews") from exc
+
+    reader = PdfReader(io.BytesIO(pdf_bytes))
+    pages: list[str] = []
+    for index, page in enumerate(reader.pages, start=1):
+        text_content = page.extract_text() or ""
+        text_content = clean_pdf_page_text(text_content)
+        if text_content:
+            pages.append(f"[Page {index}]\n{text_content}")
+    return "\n\n".join(pages)
+
+
+def clean_pdf_page_text(value: str) -> str:
+    value = value.replace("\x00", " ")
+    value = re.sub(r"[ \t]+", " ", value)
+    value = re.sub(r"\n{3,}", "\n\n", value)
+    return value.strip()
+
+
+def limit_full_text(value: str, max_chars: int) -> str:
+    trimmed = trim_references(value)
+    if len(trimmed) <= max_chars:
+        return trimmed
+    return trimmed[:max_chars].rstrip() + "\n\n[全文因長度限制截斷]"
+
+
+def trim_references(value: str) -> str:
+    match = re.search(r"\n\s*(references|bibliography)\s*\n", value, flags=re.IGNORECASE)
+    if not match:
+        return value
+    main_text = value[: match.start()].rstrip()
+    return main_text if len(main_text) > 4000 else value
+
+
+def safe_cache_name(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", value)
+
+
 def call_openai(api_key: str, model: str, prompt: str) -> str:
     payload = {
         "model": model,
@@ -621,24 +683,31 @@ def call_openai(api_key: str, model: str, prompt: str) -> str:
     raise RuntimeError(f"OpenAI response did not contain text output: {response_text[:1000]}")
 
 
-def summarize_paper(api_key: str, model: str, paper: Paper, score: ScoreBreakdown) -> dict[str, str]:
+def summarize_paper(
+    api_key: str,
+    model: str,
+    paper: Paper,
+    score: ScoreBreakdown,
+    paper_text: PaperText,
+) -> dict[str, str]:
     prompt = f"""
-你是一位面向 AI 從業者的論文編輯。請根據下面的 arXiv metadata、abstract 和篩選理由，寫一份克制、可驗證的論文解讀。
+你是一位面向 AI 從業者的論文編輯。請根據下面的 arXiv metadata、篩選理由與論文全文抽取文字，寫一份克制、可驗證的 full-paper review。
 
 編輯原則：
 1. 先講問題，再講方案，讓讀者先理解為什麼這件事重要。
 2. 使用從業者視角，重點說明這跟工程、產品、研究落地有什麼關係。
-3. 保持克制，不把所有東西都稱為突破；不確定處明確寫「摘要未明確說明」。
+3. 保持克制，不把所有東西都稱為突破；不確定處明確寫「全文未明確說明」。
 4. 不編造結果、機構、程式碼連結或會議接收資訊。
-5. method 要說清楚核心方法或流程；result 要交代摘要中明確提到的實驗發現；conclusion 要總結這篇論文的價值與限制。
-6. research_gap 必須聚焦「這篇論文本身還有哪些可改善或缺乏的地方」。即使摘要聲稱結果顯著，也要指出仍未充分驗證、實驗設計不足、資料或場景覆蓋有限、假設過強、消融/比較不足、成本/部署風險、泛化性或失敗案例未說明等具體缺口。
+5. method 要說清楚核心方法或流程；result 要交代全文中明確提到的實驗設定、baseline、指標與發現；conclusion 要總結這篇論文的價值與限制。
+6. research_gap 必須聚焦「這篇論文本身還有哪些可改善或缺乏的地方」。即使全文聲稱結果顯著，也要指出仍未充分驗證、實驗設計不足、資料或場景覆蓋有限、假設過強、消融/比較不足、成本/部署風險、泛化性或失敗案例未說明等具體缺口。
 7. research_gap 不要只寫「未來可以延伸到更多任務」這種空泛句子；請用 reviewer 的角度，寫出讀者讀完後能判斷「這篇還不夠完整在哪裡」的內容。
-8. 若摘要沒有足夠資訊判斷缺口，仍要根據摘要可見範圍提出保守推論，並明確標註「摘要未明確說明」。
+8. 若全文抽取文字不足或只提供 abstract fallback，請根據可見範圍保守推論，並明確標註「全文未明確說明」或「僅能根據摘要判斷」。
+9. 論文文字由 PDF 自動抽取，頁碼、表格、公式可能不完整；不要過度解讀破碎表格或公式。
 
 請只輸出 JSON object，不要 Markdown，不要額外說明。JSON 欄位固定為：
 intro, motivation, method, result, conclusion, research_gap。
 
-每個欄位請用繁體中文，4-6 句。句子可以稍微具體，但不要超出摘要可支持的資訊。
+每個欄位請用繁體中文，4-6 句。句子可以稍微具體，但不要超出全文可支持的資訊。
 
 Title: {paper.title}
 Authors: {", ".join(paper.authors)}
@@ -650,6 +719,9 @@ Journal reference: {paper.journal_ref or "N/A"}
 Score: {score.total}
 Score reasons: {"; ".join(score.reasons) or "N/A"}
 Abstract: {paper.summary}
+Paper text source: {paper_text.source}
+Paper text:
+{paper_text.text}
 """.strip()
     raw = call_openai(api_key, model, prompt)
     try:
@@ -701,8 +773,9 @@ def render_report(
                 [
                     f"{index}. **{paper.title}**",
                     f"   - 分數：{score.total}",
-                    f"   - Tags: {', '.join(paper_tags(paper))}",
                     f"   - arXiv: [{paper.arxiv_id}]({paper.abs_url})",
+                    f"   - 發表日期：{paper.published[:10]}",
+                    f"   - 分類：{', '.join(paper.categories)}",
                     f"   - 入選理由：{format_reasons(score)}",
                     "",
                 ]
@@ -716,11 +789,8 @@ def render_paper_summary(index: int, paper: Paper, summary: dict[str, str], scor
         f"### {index}. {paper.title}",
         "",
         f"- 分數：{score.total}",
-        f"- Tags: {', '.join(paper_tags(paper))}",
         f"- arXiv: [{paper.arxiv_id}]({paper.abs_url})",
-        f"- PDF: {paper.pdf_url}",
         f"- 發表日期：{paper.published[:10]}",
-        f"- 作者：{', '.join(paper.authors[:8])}{' et al.' if len(paper.authors) > 8 else ''}",
         f"- 分類：{', '.join(paper.categories)}",
         f"- 入選理由：{format_reasons(score)}",
         "",
@@ -747,8 +817,6 @@ def render_sources(
     scores: dict[str, ScoreBreakdown],
     hf_signals: dict[str, HFPaperSignal],
 ) -> str:
-    focus_ids = {paper.arxiv_id for paper in focus}
-    also_ids = {paper.arxiv_id for paper in also}
     ranked = sorted(candidates, key=lambda paper: scores[paper.arxiv_id].total, reverse=True)
     lines = [
         f"# 論文來源頁 - {report_date}",
@@ -758,15 +826,16 @@ def render_sources(
         f"- arXiv 候選論文數：{len(candidates)}",
         f"- 命中 Hugging Face Daily Papers：{sum(1 for paper in candidates if base_arxiv_id(paper.arxiv_id) in hf_signals)}",
         "",
-        "| 層級 | 分數 | Tags | 論文 | 訊號 |",
-        "| --- | ---: | --- | --- | --- |",
+        "| 分數 | 論文 | 發表日期 | 分類 | 入選理由 |",
+        "| ---: | --- | --- | --- | --- |",
     ]
     for paper in ranked:
-        tier = "重點關注" if paper.arxiv_id in focus_ids else "也值得關注" if paper.arxiv_id in also_ids else "未入選"
         score = scores[paper.arxiv_id]
         paper_link = f"[{escape_md(paper.title)}]({paper.abs_url})"
-        tags = ", ".join(paper_tags(paper))
-        lines.append(f"| {tier} | {score.total} | {escape_md(tags)} | {paper_link} | {escape_md(format_reasons(score))} |")
+        categories = escape_md(", ".join(paper.categories))
+        lines.append(
+            f"| {score.total} | {paper_link} | {paper.published[:10]} | {categories} | {escape_md(format_reasons(score))} |"
+        )
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -829,9 +898,11 @@ def main() -> int:
     )
 
     summaries: dict[str, dict[str, str]] = {}
+    paper_cache_dir = Path(args.paper_cache_dir)
     for index, paper in enumerate(focus, start=1):
         print(f"Summarizing {index}/{len(focus)}: {paper.title}", file=sys.stderr)
-        summaries[paper.arxiv_id] = summarize_paper(api_key, args.model, paper, scores[paper.arxiv_id])
+        paper_text = load_paper_text(paper, paper_cache_dir, args.full_text_chars)
+        summaries[paper.arxiv_id] = summarize_paper(api_key, args.model, paper, scores[paper.arxiv_id], paper_text)
         if index < len(focus):
             time.sleep(1)
 
