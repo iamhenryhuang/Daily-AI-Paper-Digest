@@ -1,3 +1,5 @@
+const FAVORITES_KEY = "paper-digest-favorites-v1";
+
 const state = {
   entries: [],
   current: null,
@@ -6,6 +8,8 @@ const state = {
   query: "",
   activeTag: "",
   tags: [],
+  favorites: loadFavorites(),
+  showFavorites: false,
 };
 
 const els = {
@@ -18,6 +22,7 @@ const els = {
   sourcesTab: document.querySelector("#sourcesTab"),
   searchInput: document.querySelector("#searchInput"),
   tagFilters: document.querySelector("#tagFilters"),
+  favoritesToggle: document.querySelector("#favoritesToggle"),
 };
 
 init();
@@ -34,6 +39,7 @@ async function init() {
       return;
     }
     renderDates();
+    renderFavoriteToggle();
     await selectDate(state.entries[0].date);
   } catch (error) {
     showEmpty(`讀取 manifest.json 失敗：${error.message}`);
@@ -46,6 +52,11 @@ function bindEvents() {
   els.sourcesTab.addEventListener("click", () => switchMode("sources"));
   els.searchInput.addEventListener("input", () => {
     state.query = els.searchInput.value.trim();
+    renderCurrentDocument();
+  });
+  els.favoritesToggle.addEventListener("click", () => {
+    state.showFavorites = !state.showFavorites;
+    renderFavoriteToggle();
     renderCurrentDocument();
   });
 }
@@ -135,23 +146,136 @@ function renderTagFilters() {
   }
 }
 
+function renderFavoriteToggle() {
+  els.favoritesToggle.classList.toggle("active", state.showFavorites);
+  els.favoritesToggle.setAttribute("aria-pressed", String(state.showFavorites));
+}
+
 function renderCurrentDocument() {
-  const result = filterMarkdown(state.markdown, state.query, state.activeTag);
+  const result = filterMarkdown(state.markdown, state.query, state.activeTag, state.showFavorites);
   if (!result.markdown.trim()) {
-    const label = [state.query && `「${escapeHtml(state.query)}」`, state.activeTag && `#${escapeHtml(state.activeTag)}`]
+    const label = [
+      state.query && `「${escapeHtml(state.query)}」`,
+      state.activeTag && `#${escapeHtml(state.activeTag)}`,
+      state.showFavorites && "收藏",
+    ]
       .filter(Boolean)
       .join(" + ");
     els.content.innerHTML = `<p class="empty">沒有找到${label || "符合條件的"}相關內容。</p>`;
   } else {
     els.content.innerHTML = renderMarkdown(result.markdown, state.query);
+    enhanceFavorites();
   }
 
   const modeText = state.mode === "report" ? "摘要" : "來源";
-  if (state.query || state.activeTag) {
-    const filters = [state.query && `「${state.query}」`, state.activeTag && `#${state.activeTag}`].filter(Boolean).join(" + ");
+  if (state.query || state.activeTag || state.showFavorites) {
+    const filters = [
+      state.query && `「${state.query}」`,
+      state.activeTag && `#${state.activeTag}`,
+      state.showFavorites && "收藏",
+    ]
+      .filter(Boolean)
+      .join(" + ");
     els.statusText.textContent = `${modeText}：${result.count} 筆符合 ${filters}`;
   } else {
     els.statusText.textContent = modeText;
+  }
+}
+
+function enhanceFavorites() {
+  for (const heading of els.content.querySelectorAll("h3")) {
+    const blockText = collectElementBlockText(heading);
+    const paper = extractPaperMeta(blockText, heading.textContent);
+    if (!paper.id) continue;
+    heading.classList.add("paper-heading");
+    heading.prepend(createFavoriteButton(paper));
+  }
+
+  for (const item of els.content.querySelectorAll("ol > li")) {
+    const paper = extractPaperMeta(item.textContent, item.textContent);
+    if (!paper.id || item.querySelector(".favorite-button")) continue;
+    item.classList.add("favorite-list-item");
+    item.prepend(createFavoriteButton(paper));
+  }
+
+  for (const row of els.content.querySelectorAll("tbody tr")) {
+    const paper = extractPaperMeta(row.textContent, row.textContent);
+    if (!paper.id || row.querySelector(".favorite-button")) continue;
+    const firstCell = row.querySelector("td");
+    if (firstCell) firstCell.prepend(createFavoriteButton(paper));
+  }
+}
+
+function createFavoriteButton(paper) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "favorite-button";
+  button.dataset.paperId = paper.id;
+  button.title = state.favorites[paper.id] ? "取消收藏" : "收藏論文";
+  button.setAttribute("aria-label", button.title);
+  button.setAttribute("aria-pressed", String(Boolean(state.favorites[paper.id])));
+  button.textContent = state.favorites[paper.id] ? "已收藏" : "收藏";
+  button.addEventListener("click", () => toggleFavorite(paper.id, paper));
+  return button;
+}
+
+function toggleFavorite(id, paper) {
+  if (state.favorites[id]) {
+    delete state.favorites[id];
+  } else {
+    state.favorites[id] = {
+      id,
+      title: paper.title,
+      url: paper.url,
+      date: state.current?.date || "",
+    };
+  }
+  saveFavorites();
+  renderCurrentDocument();
+}
+
+function collectElementBlockText(startElement) {
+  const parts = [startElement.textContent];
+  let node = startElement.nextElementSibling;
+  while (node && !/^H[23]$/.test(node.tagName)) {
+    parts.push(node.textContent);
+    node = node.nextElementSibling;
+  }
+  return parts.join("\n");
+}
+
+function extractPaperMeta(text, fallbackTitle = "") {
+  const arxivMatch = text.match(/\b\d{4}\.\d{4,5}(?:v\d+)?\b/);
+  const linkMatch = text.match(/https?:\/\/(?:www\.)?arxiv\.org\/(?:abs|pdf)\/(\d{4}\.\d{4,5}(?:v\d+)?)/i);
+  const id = arxivMatch?.[0] || linkMatch?.[1] || "";
+  return {
+    id: basePaperId(id),
+    title: cleanTitle(fallbackTitle),
+    url: id ? `https://arxiv.org/abs/${id}` : "",
+  };
+}
+
+function basePaperId(id) {
+  return id.replace(/v\d+$/i, "");
+}
+
+function cleanTitle(value) {
+  return value.replace(/^(收藏|已收藏)\s*/, "").replace(/^\d+\.\s*/, "").trim();
+}
+
+function loadFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveFavorites() {
+  try {
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(state.favorites));
+  } catch {
+    // Keep the in-memory favorite state for the current page even if storage is blocked.
   }
 }
 
@@ -180,8 +304,8 @@ function addTags(tags, raw) {
   }
 }
 
-function filterMarkdown(markdown, query, activeTag = "") {
-  if (!query && !activeTag) return { markdown, count: 0 };
+function filterMarkdown(markdown, query, activeTag = "", onlyFavorites = false) {
+  if (!query && !activeTag && !onlyFavorites) return { markdown, count: 0 };
 
   const normalizedQuery = query.toLowerCase();
   const normalizedTag = activeTag.toLowerCase();
@@ -196,7 +320,7 @@ function filterMarkdown(markdown, query, activeTag = "") {
 
       while (i < lines.length && lines[i].includes("|") && lines[i].trim()) {
         const rowText = lines[i].toLowerCase();
-        if (matchesFilters(rowText, normalizedQuery, normalizedTag)) {
+        if (matchesFilters(rowText, normalizedQuery, normalizedTag, onlyFavorites)) {
           tableLines.push(lines[i]);
           count += 1;
         }
@@ -214,7 +338,7 @@ function filterMarkdown(markdown, query, activeTag = "") {
     }
 
     const text = block.join("\n");
-    if (matchesFilters(text.toLowerCase(), normalizedQuery, normalizedTag)) {
+    if (matchesFilters(text.toLowerCase(), normalizedQuery, normalizedTag, onlyFavorites)) {
       matches.push(text);
       count += 1;
     }
@@ -226,10 +350,15 @@ function filterMarkdown(markdown, query, activeTag = "") {
   };
 }
 
-function matchesFilters(text, normalizedQuery, normalizedTag) {
+function matchesFilters(text, normalizedQuery, normalizedTag, onlyFavorites) {
   const queryMatch = !normalizedQuery || text.includes(normalizedQuery);
   const tagMatch = !normalizedTag || ((text.includes("tags:") || text.includes("|")) && text.includes(normalizedTag));
-  return queryMatch && tagMatch;
+  const favoriteMatch = !onlyFavorites || favoriteIdsInText(text).some((id) => state.favorites[id]);
+  return queryMatch && tagMatch && favoriteMatch;
+}
+
+function favoriteIdsInText(text) {
+  return [...text.matchAll(/\b\d{4}\.\d{4,5}(?:v\d+)?\b/g)].map((match) => basePaperId(match[0]));
 }
 
 function isSearchBoundary(line) {
