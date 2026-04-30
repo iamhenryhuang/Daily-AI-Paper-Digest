@@ -201,6 +201,7 @@ a {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .current-date {
@@ -237,6 +238,38 @@ a {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
   outline: 0;
+}
+
+.tag-filters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: min(420px, 36vw);
+  overflow-x: auto;
+  padding: 2px 0;
+}
+
+.tag-filter {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--accent-dark);
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.tag-filter:hover,
+.tag-filter.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.tag-filter.active {
+  font-weight: 700;
 }
 
 .tabs {
@@ -425,6 +458,10 @@ a {
 
   .search-field input {
     width: 100%;
+  }
+
+  .tag-filters {
+    max-width: 100%;
   }
 
   .tabs {

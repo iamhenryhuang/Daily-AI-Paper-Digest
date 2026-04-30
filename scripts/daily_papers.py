@@ -96,6 +96,25 @@ TOP_VENUES = (
 
 CODE_KEYWORDS = ("github.com", "code is available", "source code", "open-source", "open source", "repository")
 
+TAG_RULES = (
+    ("LLM", ("large language model", "llm", "language model", "gpt", "transformer")),
+    ("NLP", ("natural language", "nlp", "text", "language", "translation", "summarization", "question answering")),
+    ("Vision", ("computer vision", "vision-language", "image", "video", "segmentation", "detection", "visual")),
+    ("Agent", ("agent", "agents", "multi-agent", "agentic")),
+    ("RAG", ("retrieval augmented", "retrieval-augmented", "rag", "retrieval")),
+    ("Recommendation", ("recommendation", "recommender", "ranking", "reranking", "re-ranking")),
+    ("Safety", ("safety", "alignment", "jailbreak", "hallucination", "privacy", "security")),
+)
+
+CATEGORY_TAGS = {
+    "cs.CL": "NLP",
+    "cs.CV": "Vision",
+    "cs.IR": "RAG",
+    "cs.MA": "Agent",
+}
+
+MAX_TAGS_PER_PAPER = 3
+
 
 @dataclass(frozen=True)
 class Paper:
@@ -134,7 +153,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--date", default=today, help="Report date. Default: today in UTC.")
     parser.add_argument("--focus-count", type=int, default=5, help="Maximum papers in the focus section.")
     parser.add_argument("--also-count", type=int, default=3, help="Maximum papers in the also-watch section.")
-    parser.add_argument("--lookback-days", type=int, default=3, help="Only keep arXiv papers published within this window.")
+    parser.add_argument(
+        "--lookback-days",
+        type=int,
+        default=3,
+        help="Fallback window to inspect when the preferred paper date has no new papers.",
+    )
+    parser.add_argument(
+        "--preferred-offset-days",
+        type=int,
+        default=1,
+        help="Prefer papers published this many days before the report date. Default: 1 (yesterday).",
+    )
     parser.add_argument("--arxiv-results", type=int, default=120, help="How many arXiv results to inspect.")
     parser.add_argument("--focus-threshold", type=int, default=8, help="Minimum score for focus papers.")
     parser.add_argument("--also-threshold", type=int, default=4, help="Minimum score for also-watch papers.")
@@ -352,6 +382,44 @@ def base_arxiv_id(arxiv_id: str) -> str:
     return re.sub(r"v\d+$", "", arxiv_id)
 
 
+def select_candidate_papers(
+    papers: list[Paper],
+    report_date: dt.date,
+    lookback_days: int,
+    preferred_offset_days: int,
+    reported_ids: set[str] | None = None,
+) -> list[Paper]:
+    preferred_date = report_date - dt.timedelta(days=preferred_offset_days)
+    earliest = preferred_date - dt.timedelta(days=max(0, lookback_days - 1))
+    reported_ids = reported_ids or set()
+    by_date: dict[dt.date, list[Paper]] = {}
+    seen: set[str] = set()
+
+    for paper in papers:
+        paper_id = base_arxiv_id(paper.arxiv_id)
+        if paper_id in seen or paper_id in reported_ids:
+            continue
+
+        published_date = parse_arxiv_date(paper.published)
+        if earliest <= published_date <= preferred_date:
+            by_date.setdefault(published_date, []).append(paper)
+            seen.add(paper_id)
+
+    if by_date.get(preferred_date):
+        print(f"Using papers published on preferred date {preferred_date}.", file=sys.stderr)
+        return by_date[preferred_date]
+
+    for published_date in sorted(by_date.keys(), reverse=True):
+        print(
+            f"No new papers found for preferred date {preferred_date}; "
+            f"falling back to {published_date}.",
+            file=sys.stderr,
+        )
+        return by_date[published_date]
+
+    return []
+
+
 def recent_papers(papers: list[Paper], report_date: dt.date, lookback_days: int) -> list[Paper]:
     earliest = report_date - dt.timedelta(days=lookback_days)
     selected = []
@@ -366,6 +434,24 @@ def recent_papers(papers: list[Paper], report_date: dt.date, lookback_days: int)
             selected.append(paper)
             seen.add(paper_id)
     return selected
+
+
+def load_reported_arxiv_ids(*directories: Path, exclude_date: str | None = None) -> set[str]:
+    reported: set[str] = set()
+    for directory in directories:
+        if not directory.exists():
+            continue
+        for path in directory.glob("*.md"):
+            if exclude_date and path.stem == exclude_date:
+                continue
+            try:
+                text_value = path.read_text(encoding="utf-8")
+            except OSError as exc:
+                print(f"Warning: failed to read {path}: {exc}", file=sys.stderr)
+                continue
+            for match in re.finditer(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", text_value):
+                reported.add(base_arxiv_id(match.group(0)))
+    return reported
 
 
 def parse_arxiv_date(value: str) -> dt.date:
@@ -408,6 +494,37 @@ def score_paper(paper: Paper, hf_signals: dict[str, HFPaperSignal]) -> ScoreBrea
         add(score, 2, "提及程式碼可用")
 
     return score
+
+
+def paper_tags(paper: Paper) -> list[str]:
+    tags: list[str] = []
+    seen: set[str] = set()
+
+    def add_tag(tag: str) -> None:
+        if tag not in seen:
+            tags.append(tag)
+            seen.add(tag)
+
+    for category in paper.categories:
+        tag = CATEGORY_TAGS.get(category)
+        if tag:
+            add_tag(tag)
+
+    haystack = " ".join(
+        [
+            paper.title,
+            paper.summary,
+            paper.comment,
+            paper.journal_ref,
+            " ".join(paper.categories),
+        ]
+    ).lower()
+
+    for tag, keywords in TAG_RULES:
+        if any(keyword in haystack for keyword in keywords):
+            add_tag(tag)
+
+    return (tags or ["AI"])[:MAX_TAGS_PER_PAPER]
 
 
 def add(score: ScoreBreakdown, points: int, reason: str) -> None:
@@ -582,6 +699,7 @@ def render_report(
                 [
                     f"{index}. **{paper.title}**",
                     f"   - 分數：{score.total}",
+                    f"   - Tags: {', '.join(paper_tags(paper))}",
                     f"   - arXiv: [{paper.arxiv_id}]({paper.abs_url})",
                     f"   - 入選理由：{format_reasons(score)}",
                     "",
@@ -596,6 +714,7 @@ def render_paper_summary(index: int, paper: Paper, summary: dict[str, str], scor
         f"### {index}. {paper.title}",
         "",
         f"- 分數：{score.total}",
+        f"- Tags: {', '.join(paper_tags(paper))}",
         f"- arXiv: [{paper.arxiv_id}]({paper.abs_url})",
         f"- PDF: {paper.pdf_url}",
         f"- 發表日期：{paper.published[:10]}",
@@ -637,14 +756,15 @@ def render_sources(
         f"- arXiv 候選論文數：{len(candidates)}",
         f"- 命中 Hugging Face Daily Papers：{sum(1 for paper in candidates if base_arxiv_id(paper.arxiv_id) in hf_signals)}",
         "",
-        "| 層級 | 分數 | 論文 | 訊號 |",
-        "| --- | ---: | --- | --- |",
+        "| 層級 | 分數 | Tags | 論文 | 訊號 |",
+        "| --- | ---: | --- | --- | --- |",
     ]
     for paper in ranked:
         tier = "重點關注" if paper.arxiv_id in focus_ids else "也值得關注" if paper.arxiv_id in also_ids else "未入選"
         score = scores[paper.arxiv_id]
         paper_link = f"[{escape_md(paper.title)}]({paper.abs_url})"
-        lines.append(f"| {tier} | {score.total} | {paper_link} | {escape_md(format_reasons(score))} |")
+        tags = ", ".join(paper_tags(paper))
+        lines.append(f"| {tier} | {score.total} | {escape_md(tags)} | {paper_link} | {escape_md(format_reasons(score))} |")
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -666,12 +786,30 @@ def main() -> int:
 
     report_date = dt.date.fromisoformat(args.date)
     categories = env_categories()
+    output_dir = Path(args.output_dir)
+    sources_dir = Path(args.sources_dir)
+    reported_ids = load_reported_arxiv_ids(output_dir, sources_dir, exclude_date=args.date)
 
     print("Fetching arXiv candidates...", file=sys.stderr)
     papers = fetch_arxiv_papers(categories, args.arxiv_results)
-    candidates = recent_papers(papers, report_date, args.lookback_days)
+    candidates = select_candidate_papers(
+        papers,
+        report_date,
+        args.lookback_days,
+        args.preferred_offset_days,
+        reported_ids,
+    )
     if not candidates:
-        candidates = papers
+        print(
+            "No new papers found in the preferred fallback window; "
+            "using fetched papers after removing previously reported IDs.",
+            file=sys.stderr,
+        )
+        candidates = [paper for paper in papers if base_arxiv_id(paper.arxiv_id) not in reported_ids]
+
+    if not candidates:
+        print("No new arXiv candidates found after excluding previously reported papers.", file=sys.stderr)
+        return 1
 
     print("Fetching Hugging Face Daily Papers...", file=sys.stderr)
     hf_signals = fetch_hf_daily_papers()
@@ -695,8 +833,6 @@ def main() -> int:
         if index < len(focus):
             time.sleep(1)
 
-    output_dir = Path(args.output_dir)
-    sources_dir = Path(args.sources_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     sources_dir.mkdir(parents=True, exist_ok=True)
 
