@@ -704,6 +704,12 @@ def summarize_paper(
 8. 若全文抽取文字不足或只提供 abstract fallback，請根據可見範圍保守推論，並明確標註「全文未明確說明」或「僅能根據摘要判斷」。
 9. 論文文字由 PDF 自動抽取，頁碼、表格、公式可能不完整；不要過度解讀破碎表格或公式。
 
+語言規則：
+1. JSON key 固定使用英文：intro, motivation, method, result, conclusion, research_gap。
+2. JSON value 必須使用繁體中文撰寫。
+3. 專有名詞、模型名稱、資料集名稱、方法名稱、指標名稱、會議名稱可以保留英文。
+4. 不要輸出完整英文句子；即使原文是英文，也要用繁體中文解釋。
+
 請只輸出 JSON object，不要 Markdown，不要額外說明。JSON 欄位固定為：
 intro, motivation, method, result, conclusion, research_gap。
 
@@ -721,7 +727,11 @@ Score reasons: {"; ".join(score.reasons) or "N/A"}
 Abstract: {paper.summary}
 Paper text source: {paper_text.source}
 Paper text:
+---BEGIN PAPER TEXT---
 {paper_text.text}
+---END PAPER TEXT---
+
+最終輸出提醒：只輸出 JSON object；key 用英文，所有 value 都必須是繁體中文。除了專有名詞、模型名稱、資料集名稱、方法名稱、指標名稱、會議名稱外，不要使用英文句子。
 """.strip()
     raw = call_openai(api_key, model, prompt)
     try:
