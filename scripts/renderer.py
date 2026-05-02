@@ -57,7 +57,8 @@ def render_sources(
     scores: dict[str, ScoreBreakdown],
     hf_signals: dict[str, HFPaperSignal],
 ) -> str:
-    ranked = sorted(candidates, key=lambda p: scores[p.arxiv_id].total, reverse=True)
+    scored = [p for p in candidates if scores[p.arxiv_id].total > 0]
+    ranked = sorted(scored, key=lambda p: scores[p.arxiv_id].total, reverse=True)
     lines = [
         f"# 論文來源頁 - {report_date}",
         "",
