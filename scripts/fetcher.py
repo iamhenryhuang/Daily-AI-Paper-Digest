@@ -6,7 +6,6 @@ import datetime as dt
 import html
 import re
 import sys
-import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -19,39 +18,27 @@ HF_PAPERS_URL = "https://huggingface.co/papers"
 
 
 def fetch_arxiv_papers(categories: tuple[str, ...], max_results: int) -> list[Paper]:
-    per_category = max(10, (max_results + len(categories) - 1) // len(categories))
-    papers: list[Paper] = []
+    params = {
+        "search_query": _build_arxiv_query(categories),
+        "start": "0",
+        "max_results": str(max_results),
+        "sortBy": "submittedDate",
+        "sortOrder": "descending",
+    }
+    url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
+    print(f"Fetching arXiv ({', '.join(categories)})...", file=sys.stderr)
+    try:
+        xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=4)
+    except RuntimeError as exc:
+        raise RuntimeError(f"Failed to fetch arXiv candidates: {exc}") from exc
+
     seen: set[str] = set()
-    errors: list[str] = []
-
-    for index, category in enumerate(categories, start=1):
-        params = {
-            "search_query": _build_arxiv_query((category,)),
-            "start": "0",
-            "max_results": str(per_category),
-            "sortBy": "submittedDate",
-            "sortOrder": "descending",
-        }
-        url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
-        print(f"Fetching arXiv category {index}/{len(categories)}: {category}", file=sys.stderr)
-        try:
-            xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=4)
-        except RuntimeError as exc:
-            errors.append(f"{category}: {_short(exc)}")
-            print(f"Warning: failed to fetch arXiv category {category}: {exc}", file=sys.stderr)
-            continue
-
-        for paper in _parse_arxiv_feed(xml_text):
-            paper_id = base_arxiv_id(paper.arxiv_id)
-            if paper_id not in seen:
-                papers.append(paper)
-                seen.add(paper_id)
-
-        if index < len(categories):
-            time.sleep(3)
-
-    if not papers:
-        raise RuntimeError("Failed to fetch arXiv candidates. " + " | ".join(errors))
+    papers: list[Paper] = []
+    for paper in _parse_arxiv_feed(xml_text):
+        paper_id = base_arxiv_id(paper.arxiv_id)
+        if paper_id not in seen:
+            papers.append(paper)
+            seen.add(paper_id)
 
     return sorted(papers, key=lambda p: p.published, reverse=True)[:max_results]
 
