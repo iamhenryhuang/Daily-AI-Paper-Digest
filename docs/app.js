@@ -178,10 +178,13 @@ function createFavoriteButton(paper) {
   button.type = "button";
   button.className = "favorite-button";
   button.dataset.paperId = paper.id;
-  button.title = state.favorites[paper.id] ? "取消收藏" : "收藏論文";
+  const isFav = Boolean(state.favorites[paper.id]);
+  button.title = isFav ? "取消收藏" : "收藏論文";
   button.setAttribute("aria-label", button.title);
-  button.setAttribute("aria-pressed", String(Boolean(state.favorites[paper.id])));
-  button.textContent = state.favorites[paper.id] ? "★" : "☆";
+  button.setAttribute("aria-pressed", String(isFav));
+  button.innerHTML = isFav
+    ? `<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1.5A.5.5 0 0 1 1.5 1h9a.5.5 0 0 1 .5.5v11.29a.5.5 0 0 1-.8.4L6 10.12l-4.2 3.07A.5.5 0 0 1 1 12.79V1.5z"/></svg>`
+    : `<svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1.5A.5.5 0 0 1 1.5 1h9a.5.5 0 0 1 .5.5v11.29a.5.5 0 0 1-.8.4L6 10.12l-4.2 3.07A.5.5 0 0 1 1 12.79V1.5z"/></svg>`;
   button.addEventListener("click", () => toggleFavorite(paper.id, paper));
   return button;
 }
