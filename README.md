@@ -74,6 +74,37 @@ python scripts/daily_papers.py
 python scripts/daily_papers.py --focus-count 5 --also-count 3 --lookback-days 3
 ```
 
+## 本地開發推送
+
+Action 每天會 commit 新的 `docs/` 並 push 到 `main`，如果本地也有未推的 commit，直接 `git push` 會因為 remote 超前而被拒。
+
+標準做法是 rebase 後再推：
+
+```powershell
+git pull --rebase origin main
+git push
+```
+
+`--rebase` 會把你的本地 commit 接到 Action 的 commit 後面，不會產生 merge commit，歷史也比較乾淨。
+
+如果想完全避免這個問題，可以養成習慣在開始改東西前先 pull：
+
+```powershell
+git pull --rebase origin main
+# 改你的東西
+git add .
+git commit -m "..."
+git push
+```
+
+如果 rebase 中途出現衝突（通常是你也改了 `docs/` 裡的東西），解完衝突後：
+
+```powershell
+git add <衝突檔案>
+git rebase --continue
+git push
+```
+
 ## 調整
 
 可在 `.env` 或 workflow 裡調整：
