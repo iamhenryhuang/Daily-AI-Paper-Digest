@@ -108,6 +108,9 @@ class ScoreBreakdown:
     total: int = 0
     reasons: list[str] = field(default_factory=list)
     hf_votes: int = 0
+    llm_rank: int | None = None
+    llm_score: int | None = None
+    llm_reason: str = ""
 
 
 @dataclass(frozen=True)

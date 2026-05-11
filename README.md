@@ -74,6 +74,17 @@ python scripts/daily_papers.py
 python scripts/daily_papers.py --focus-count 5 --also-count 3 --lookback-days 3
 ```
 
+### LLM reranker
+
+After rule-based scoring, the generator sends the top candidates to the configured OpenAI model and asks it to rerank papers by novelty, practical usefulness, research impact, credibility, and your preferences.
+
+```powershell
+python scripts/daily_papers.py --rerank-count 20 --preference-file paper_preferences.md
+```
+
+- `--rerank-count 20`: rerank the top 20 rule-ranked candidates. Use `--rerank-count 0` to disable.
+- `--preference-file paper_preferences.md`: optional plain-text preferences. See `paper_preferences.example.md`.
+
 ## 本地開發推送
 
 Action 每天會 commit 新的 `docs/` 並 push 到 `main`，如果本地也有未推的 commit，直接 `git push` 會因為 remote 超前而被拒。

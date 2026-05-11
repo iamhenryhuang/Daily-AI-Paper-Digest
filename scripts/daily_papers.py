@@ -23,7 +23,8 @@ from fetcher import (
 )
 from pdf_reader import load_paper_text
 from renderer import render_report, render_sources
-from scorer import score_paper, select_papers
+from reranker import apply_rerank_order, rerank_papers
+from scorer import rank_papers_by_score, score_paper, select_papers
 
 OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
 
@@ -39,6 +40,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--arxiv-results", type=int, default=120, help="How many arXiv results to inspect.")
     parser.add_argument("--focus-threshold", type=int, default=8, help="Minimum score for focus papers.")
     parser.add_argument("--also-threshold", type=int, default=4, help="Minimum score for also-watch papers.")
+    parser.add_argument("--rerank-count", type=int, default=20, help="How many rule-ranked candidates to send to the LLM reranker. Use 0 to disable.")
+    parser.add_argument("--preference-file", default=os.getenv("PAPER_PREFERENCES_FILE", "paper_preferences.md"), help="Optional text file describing paper ranking preferences.")
     parser.add_argument("--model", default=os.getenv("OPENAI_MODEL", DEFAULT_MODEL), help="OpenAI model name.")
     parser.add_argument("--output-dir", default="docs/reports", help="Directory for Markdown reports.")
     parser.add_argument("--sources-dir", default="docs/sources", help="Directory for transparent source pages.")
@@ -66,6 +69,17 @@ def env_categories() -> tuple[str, ...]:
     raw = os.getenv("ARXIV_CATEGORIES", "")
     categories = tuple(item.strip() for item in raw.split(",") if item.strip())
     return categories or DEFAULT_CATEGORIES
+
+
+def load_preference_file(path: str) -> str:
+    preference_path = Path(path)
+    if not preference_path.exists():
+        return ""
+    try:
+        return preference_path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        print(f"Warning: failed to read preference file {preference_path}: {exc}", file=sys.stderr)
+        return ""
 
 
 def summarize_paper(api_key: str, model: str, paper: Paper, score: ScoreBreakdown, paper_text: PaperText) -> dict[str, str]:
@@ -182,7 +196,26 @@ def main() -> int:
 
     print("Scoring candidates...", file=sys.stderr)
     scores = {p.arxiv_id: score_paper(p, hf_signals) for p in candidates}
-    focus, also = select_papers(candidates, scores, args.focus_threshold, args.also_threshold, args.focus_count, args.also_count, args.date)
+    ranked = rank_papers_by_score(candidates, scores, args.date)
+    if args.rerank_count > 0:
+        rerank_candidates = ranked[: args.rerank_count]
+        try:
+            print(f"Reranking top {len(rerank_candidates)} candidates with LLM...", file=sys.stderr)
+            reranked_ids = rerank_papers(api_key, args.model, rerank_candidates, scores, load_preference_file(args.preference_file))
+            ranked = apply_rerank_order(ranked, reranked_ids)
+        except Exception as exc:
+            print(f"Warning: LLM reranker failed; using rule-based ranking: {exc}", file=sys.stderr)
+
+    focus, also = select_papers(
+        candidates,
+        scores,
+        args.focus_threshold,
+        args.also_threshold,
+        args.focus_count,
+        args.also_count,
+        args.date,
+        ranked_papers=ranked,
+    )
 
     summaries: dict[str, dict[str, str]] = {}
     paper_cache_dir = Path(args.paper_cache_dir)

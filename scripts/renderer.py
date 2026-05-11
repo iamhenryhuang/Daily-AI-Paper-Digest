@@ -80,7 +80,15 @@ def render_sources(
 
 
 def format_reasons(score: ScoreBreakdown) -> str:
-    return "; ".join(score.reasons) if score.reasons else "未命中正向訊號"
+    reasons = list(score.reasons)
+    if score.llm_rank is not None:
+        label = f"LLM rank #{score.llm_rank}"
+        if score.llm_score is not None:
+            label += f" / {score.llm_score}/10"
+        if score.llm_reason:
+            label += f": {score.llm_reason}"
+        reasons.append(label)
+    return "; ".join(reasons) if reasons else "未命中正向訊號"
 
 
 # ── private helpers ──────────────────────────────────────────────────────────

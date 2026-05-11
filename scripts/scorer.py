@@ -49,8 +49,9 @@ def select_papers(
     focus_count: int,
     also_count: int,
     random_seed: str,
+    ranked_papers: list[Paper] | None = None,
 ) -> tuple[list[Paper], list[Paper]]:
-    ranked = _rank_by_score(papers, scores, random_seed)
+    ranked = ranked_papers or rank_papers_by_score(papers, scores, random_seed)
     focus = [p for p in ranked if scores[p.arxiv_id].total >= focus_threshold][:focus_count]
     focus_ids = {p.arxiv_id for p in focus}
     also = [p for p in ranked if p.arxiv_id not in focus_ids and scores[p.arxiv_id].total >= also_threshold][:also_count]
@@ -61,6 +62,10 @@ def select_papers(
         also = [p for p in ranked if p.arxiv_id not in focus_ids][:also_count]
 
     return focus, also
+
+
+def rank_papers_by_score(papers: list[Paper], scores: dict[str, ScoreBreakdown], random_seed: str) -> list[Paper]:
+    return _rank_by_score(papers, scores, random_seed)
 
 
 # ── private helpers ──────────────────────────────────────────────────────────
