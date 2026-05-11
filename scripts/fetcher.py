@@ -8,12 +8,14 @@ import re
 import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 from _http import request_text
 from _models import HFPaperSignal, Paper
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
+ARXIV_RSS_URL = "https://rss.arxiv.org/rss/{category}"
 HF_PAPERS_URL = "https://huggingface.co/papers"
 
 
@@ -28,9 +30,10 @@ def fetch_arxiv_papers(categories: tuple[str, ...], max_results: int) -> list[Pa
     url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
     print(f"Fetching arXiv ({', '.join(categories)})...", file=sys.stderr)
     try:
-        xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=6)
+        xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=3)
     except RuntimeError as exc:
-        raise RuntimeError(f"Failed to fetch arXiv candidates: {exc}") from exc
+        print(f"Warning: failed to fetch arXiv API candidates: {exc}", file=sys.stderr)
+        return _fetch_arxiv_rss_papers(categories, max_results)
 
     seen: set[str] = set()
     papers: list[Paper] = []
@@ -41,6 +44,36 @@ def fetch_arxiv_papers(categories: tuple[str, ...], max_results: int) -> list[Pa
             seen.add(paper_id)
 
     return sorted(papers, key=lambda p: p.published, reverse=True)[:max_results]
+
+
+def _fetch_arxiv_rss_papers(categories: tuple[str, ...], max_results: int) -> list[Paper]:
+    print("Falling back to arXiv RSS feeds...", file=sys.stderr)
+    seen: set[str] = set()
+    papers: list[Paper] = []
+    failures: list[str] = []
+
+    for category in categories:
+        url = ARXIV_RSS_URL.format(category=urllib.parse.quote(category, safe="."))
+        try:
+            rss_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=45, retries=3)
+        except RuntimeError as exc:
+            failures.append(f"{category}: {_short(exc)}")
+            continue
+
+        for paper in _parse_arxiv_rss(rss_text, category):
+            paper_id = base_arxiv_id(paper.arxiv_id)
+            if paper_id in seen:
+                continue
+            papers.append(paper)
+            seen.add(paper_id)
+
+    if papers:
+        if failures:
+            print(f"Warning: some arXiv RSS feeds failed: {'; '.join(failures)}", file=sys.stderr)
+        return sorted(papers, key=lambda p: p.published, reverse=True)[:max_results]
+
+    failure_text = "; ".join(failures) if failures else "no RSS items found"
+    raise RuntimeError(f"Failed to fetch arXiv candidates from API and RSS fallback: {failure_text}")
 
 
 def fetch_hf_daily_papers() -> dict[str, HFPaperSignal]:
@@ -183,6 +216,40 @@ def _parse_arxiv_feed(xml_text: str) -> list[Paper]:
     return papers
 
 
+def _parse_arxiv_rss(rss_text: str, category: str) -> list[Paper]:
+    root = ET.fromstring(rss_text)
+    papers: list[Paper] = []
+
+    for item in root.findall(".//item"):
+        link = _normalize(_xml_text(item.find("link")))
+        arxiv_id = _extract_arxiv_id(link)
+        if not arxiv_id:
+            continue
+
+        raw_title = _normalize(html.unescape(_xml_text(item.find("title"))))
+        title = re.sub(r"^arXiv:\d{4}\.\d{4,5}(?:v\d+)?\s*\([^)]*\):\s*", "", raw_title).strip()
+        description = _normalize(html.unescape(re.sub(r"<[^>]+>", " ", _xml_text(item.find("description")))))
+        authors, summary = _split_rss_description(description)
+        published = _parse_rss_date(_xml_text(item.find("pubDate")))
+        abs_url = f"https://arxiv.org/abs/{arxiv_id}"
+
+        papers.append(
+            Paper(
+                arxiv_id=arxiv_id,
+                title=title or arxiv_id,
+                authors=authors,
+                summary=summary,
+                published=published,
+                updated=published,
+                categories=[category],
+                abs_url=abs_url,
+                pdf_url=f"https://arxiv.org/pdf/{arxiv_id}",
+            )
+        )
+
+    return papers
+
+
 def _extract_hf_title(chunk: str) -> str:
     for pattern in (r"<h3[^>]*>(.*?)</h3>", r"<h2[^>]*>(.*?)</h2>", r'title="([^"]+)"'):
         match = re.search(pattern, chunk, flags=re.DOTALL | re.IGNORECASE)
@@ -213,3 +280,34 @@ def _normalize(value: str) -> str:
 
 def _short(exc: Exception) -> str:
     return _normalize(str(exc))[:180]
+
+
+def _extract_arxiv_id(value: str) -> str:
+    match = re.search(r"\b\d{4}\.\d{4,5}(?:v\d+)?\b", value)
+    return match.group(0) if match else ""
+
+
+def _split_rss_description(value: str) -> tuple[list[str], str]:
+    value = _normalize(value)
+    authors: list[str] = []
+    summary = value
+
+    authors_match = re.search(r"^Authors?:\s*(.*?)(?:\s+Abstract:\s*|\s*$)", value, flags=re.IGNORECASE)
+    if authors_match:
+        authors = [_normalize(part) for part in re.split(r",| and ", authors_match.group(1)) if _normalize(part)]
+
+    abstract_match = re.search(r"Abstract:\s*(.*)$", value, flags=re.IGNORECASE)
+    if abstract_match:
+        summary = _normalize(abstract_match.group(1))
+
+    return authors, summary
+
+
+def _parse_rss_date(value: str) -> str:
+    try:
+        parsed = parsedate_to_datetime(value)
+    except (TypeError, ValueError):
+        parsed = dt.datetime.now(dt.timezone.utc)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=dt.timezone.utc)
+    return parsed.astimezone(dt.timezone.utc).isoformat().replace("+00:00", "Z")

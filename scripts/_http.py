@@ -73,4 +73,5 @@ def _parse_retry_after(value: str | None) -> int | None:
         retry_at = parsedate_to_datetime(value)
     except (TypeError, ValueError):
         return None
-    return int(max(1, retry_at.timestamp() - time.time()))
+    wait_seconds = int(retry_at.timestamp() - time.time())
+    return wait_seconds if wait_seconds > 0 else None
