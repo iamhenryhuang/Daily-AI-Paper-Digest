@@ -2,8 +2,8 @@ name: Daily AI Paper Digest
 
 on:
   schedule:
-    # 07:00 Asia/Taipei
-    - cron: "0 23 * * *"
+    # 07:17 Asia/Taipei
+    - cron: "17 23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -48,7 +48,7 @@ jobs:
           --date "${{ steps.report-date.outputs.date }}"
           --focus-count 5
           --also-count 3
-          --arxiv-results 120
+          --arxiv-results 80
 
       - name: Update site manifest
         run: python scripts/update_manifest.py

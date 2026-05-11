@@ -28,7 +28,7 @@ def fetch_arxiv_papers(categories: tuple[str, ...], max_results: int) -> list[Pa
     url = f"{ARXIV_API_URL}?{urllib.parse.urlencode(params)}"
     print(f"Fetching arXiv ({', '.join(categories)})...", file=sys.stderr)
     try:
-        xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=4)
+        xml_text = request_text(url, headers={"User-Agent": "daily-ai-paper-agent/1.0"}, timeout=90, retries=6)
     except RuntimeError as exc:
         raise RuntimeError(f"Failed to fetch arXiv candidates: {exc}") from exc
 
