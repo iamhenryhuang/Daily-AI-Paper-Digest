@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-06-01",
+    "report": "reports/2026-06-01.md",
+    "sources": "sources/2026-06-01.md"
+  },
+  {
     "date": "2026-05-31",
     "report": "reports/2026-05-31.md",
     "sources": "sources/2026-05-31.md"
