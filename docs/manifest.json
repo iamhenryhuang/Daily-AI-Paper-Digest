@@ -1,8 +1,157 @@
 [
   {
+    "date": "2026-10-26",
+    "report": "reports/2026-10-26.md",
+    "sources": "sources/2026-10-26.md",
+    "focus": [
+      {
+        "title": "Tool-Calling LLM Agents Under Realistic MCP Faults: Scale Does Not Purchase Fault Tolerance",
+        "score": 7,
+        "id": "2610.32555",
+        "categories": [
+          "cs.SE",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Can LLM Annotators Match Human Consistency? Benchmarking Human Agreement and Optimizing Multi-Agent with Contrastive Knowledge",
+        "score": 7,
+        "id": "2610.32415",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "IGG: A Benchmark for Interactive GUI Grounding under Visibility Constraints",
+        "score": 5,
+        "id": "2610.32536",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "DRIVE: Fine-tuning via Data Contribution- and Diversity-aware Weighting with Prior Regularization",
+        "score": 5,
+        "id": "2610.32501",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "SCI-AGENT-EXAM: Benchmarking Agents on Scientific Research Tasks",
+        "score": 4,
+        "id": "2610.32441",
+        "categories": [
+          "cs.CL"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "POSEIDON: Scaling Training Environments for Scientific Agents from Code Repositories",
+        "score": 4,
+        "id": "2610.32448",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "PathJev: Decision-Native Vision-Language Modelling for Histopathology",
+        "score": 4,
+        "id": "2610.32478",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "LGMT: A Tool for Testing the Logical Reasoning Reliability of LLMs",
+        "score": 4,
+        "id": "2610.32627",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-25",
     "report": "reports/2026-10-25.md",
-    "sources": "sources/2026-10-25.md"
+    "sources": "sources/2026-10-25.md",
+    "focus": [
+      {
+        "title": "Low-Bit N-Gram Embeddings for Language Models",
+        "score": 0,
+        "id": "2610.31646",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Would an LLM Match into a Residency? Uncertainty, Reasoning and Image Use of Open Language Models on the Spanish MIR Examination",
+        "score": 0,
+        "id": "2610.31586",
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.CY",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Parameter-Efficient Adaptation of Large Language Models to a Low-Resource Agglutinative Language: A Corpus, Datasets, and a Reproducible Benchmark for the Bashkir Language",
+        "score": 0,
+        "id": "2610.31397",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "From Structured Records to Patient Narratives: Preserving Clinical Alignment in LLM-Generated Health Summaries",
+        "score": 0,
+        "id": "2610.31467",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "When to Follow the Teacher: Advantage-Based On-Policy Distillation",
+        "score": 0,
+        "id": "2610.31563",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "stat.ML"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Action Learning for Scientific Simulations",
+        "score": 0,
+        "id": "2610.31585",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "When Is a Memory Safe Enough to Act On? Action-Conditioned Verification for Long-Lived Agents",
+        "score": 0,
+        "id": "2610.31446",
+        "categories": [
+          "cs.MA"
+        ]
+      },
+      {
+        "title": "Ask About the Right Moment: Training-Free Object Identity Reasoning for Video-Language Models",
+        "score": 0,
+        "id": "2610.31471",
+        "categories": [
+          "cs.CV"
+        ]
+      }
+    ]
   },
   {
     "date": "2026-10-24",
