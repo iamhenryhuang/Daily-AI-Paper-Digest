@@ -1,5 +1,78 @@
 [
   {
+    "date": "2026-10-27",
+    "report": "reports/2026-10-27.md",
+    "sources": "sources/2026-10-27.md",
+    "focus": [
+      {
+        "title": "RxnExBench: Benchmarking Vision-Language Models for Structured Chemical Reaction Extraction from Scientific Literature",
+        "score": 5,
+        "id": "2610.32221",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Trial by Trace: Benchmarking AI Agent Harnesses for Reliability and Failure Attribution",
+        "score": 5,
+        "id": "2610.32285",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "PaperFormalizer: Author-in-the-Loop Autoformalization of Research Papers in Lean",
+        "score": 4,
+        "id": "2610.31810",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "MPQ: A Message-Passing View of Post-Training Quantization",
+        "score": 4,
+        "id": "2610.32127",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Lifelong Context Adaptation through Bidirectional Memory-Skill Learning",
+        "score": 4,
+        "id": "2610.32295",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Who Verifies the Tools? How Warped Formatters Mislead Agents and Their Verifiers",
+        "score": 4,
+        "id": "2610.32110",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Not All Information Is Worth Asking For: Decision-Informed Information Seeking with LLMs",
+        "score": 2,
+        "id": "2610.32181",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "$\\Psi$-0.6: Adaptive Streams of Thought in a Unified Vision-Language World Model",
+        "score": 2,
+        "id": "2610.32177",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-26",
     "report": "reports/2026-10-26.md",
     "sources": "sources/2026-10-26.md",
