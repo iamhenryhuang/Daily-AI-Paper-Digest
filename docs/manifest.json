@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-10-28",
+    "report": "reports/2026-10-28.md",
+    "sources": "sources/2026-10-28.md",
+    "focus": [
+      {
+        "title": "Can Complementary Signals Bridge Similarity Islands? Manifold-Augmented Graph Embedding for Multimodal Recommendation",
+        "score": 7,
+        "id": "2610.37409",
+        "categories": [
+          "cs.IR"
+        ]
+      },
+      {
+        "title": "What Improves During Pretraining? Tracking Knowledge Acquisition with Point-in-Time Models",
+        "score": 7,
+        "id": "2610.37631",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "M4Bench: Evaluating Procedural Specification for Clinical EHR Derivation Agents",
+        "score": 5,
+        "id": "2610.37459",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "An Input Skip Can Reparameterize a VAE Without Improving the Generator",
+        "score": 5,
+        "id": "2610.37456",
+        "categories": [
+          "cs.LG",
+          "physics.ao-ph",
+          "stat.ML"
+        ]
+      },
+      {
+        "title": "Representing the Unseen: Rethinking Visual Imagination for Spatial Reasoning",
+        "score": 5,
+        "id": "2610.37437",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.CL"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "A note on data-efficient finetuning of vision foundation models",
+        "score": 5,
+        "id": "2610.37510",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "As the Story Unfolds: Watching a Film and Identifying Characters as a Human Does",
+        "score": 3,
+        "id": "2610.37579",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "When uncertainty quantification fails: structural vulnerabilities and corrections for selective prediction under clinical class imbalance",
+        "score": 4,
+        "id": "2610.37561",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-27",
     "report": "reports/2026-10-27.md",
     "sources": "sources/2026-10-27.md",
