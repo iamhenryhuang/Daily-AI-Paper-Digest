@@ -1,5 +1,87 @@
 [
   {
+    "date": "2026-10-29",
+    "report": "reports/2026-10-29.md",
+    "sources": "sources/2026-10-29.md",
+    "focus": [
+      {
+        "title": "PerceptRL: Making Visual Perception Rewardable in MLLMs from Answers to Interactions",
+        "score": 0,
+        "id": "2610.37471",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Spectral Braids: A Topological Descriptor for Dynamic Directed Networks",
+        "score": 0,
+        "id": "2610.37580",
+        "categories": [
+          "cs.SI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "How Many and How Much? Contrastive Learning with Negative Samples for Knowledge Graph Embedding",
+        "score": 0,
+        "id": "2610.37389",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Gym-Anything-RT: Scaling Real-Time Environments for Vision-Language Agents",
+        "score": 0,
+        "id": "2610.37567",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Follow the Gradient: Tracing Safety Degradation Back to Training Data",
+        "score": 0,
+        "id": "2610.37481",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Scaling Laws for Tool-Use Agents via Controllable Environment Synthesis",
+        "score": 0,
+        "id": "2610.37648",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "GAS-PFN: Graph-Aware Spatiotemporal Prior-Data Fitted Networks for Zero-Shot Traffic Forecasting",
+        "score": 0,
+        "id": "2610.37598",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.NE"
+        ]
+      },
+      {
+        "title": "GroundControl: Satellite-Conditioned Multi-View Diffusion for Reconstruction-Free Novel View Synthesis",
+        "score": 0,
+        "id": "2610.37545",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-28",
     "report": "reports/2026-10-28.md",
     "sources": "sources/2026-10-28.md",
