@@ -1,5 +1,86 @@
 [
   {
+    "date": "2026-10-30",
+    "report": "reports/2026-10-30.md",
+    "sources": "sources/2026-10-30.md",
+    "focus": [
+      {
+        "title": "AskStream: When and What to Ask Proactively under Uncertainty in Streaming Video Understanding",
+        "score": 7,
+        "id": "2610.38678",
+        "categories": [
+          "cs.CV",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Rennala NSGD: Asynchronous Stochastic Optimization Beyond Euclidean Geometry",
+        "score": 5,
+        "id": "2610.38773",
+        "categories": [
+          "cs.LG",
+          "cs.DC",
+          "math.OC"
+        ]
+      },
+      {
+        "title": "Discovery of Diverse and Realistic Financial Tail-Risk Using Generative Flow Networks",
+        "score": 5,
+        "id": "2610.38838",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Loss is Not Behavior: A Unified Output-Space Analysis of Gradient-Based Machine Unlearning",
+        "score": 5,
+        "id": "2610.38784",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Repairs for Whom? Evaluator-Executor Mismatch in Selecting Repairs for Failed LLM Agents",
+        "score": 5,
+        "id": "2610.38610",
+        "categories": [
+          "cs.SE",
+          "cs.CL"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Cross-Primitive Consistency in Jev",
+        "score": 4,
+        "id": "2610.38623",
+        "categories": [
+          "cs.CV",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Tracekit Box: Running AI Agents in Micro-VMs Where Every Way Out Is Decided and Signed",
+        "score": 4,
+        "id": "2610.38458",
+        "categories": [
+          "cs.CE",
+          "cs.AI",
+          "cs.CR",
+          "cs.OS"
+        ]
+      },
+      {
+        "title": "CFKS: Continuum-Feature Kernel PDE Solvers",
+        "score": 4,
+        "id": "2610.38644",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-29",
     "report": "reports/2026-10-29.md",
     "sources": "sources/2026-10-29.md",
