@@ -1,5 +1,87 @@
 [
   {
+    "date": "2026-10-31",
+    "report": "reports/2026-10-31.md",
+    "sources": "sources/2026-10-31.md",
+    "focus": [
+      {
+        "title": "Don't Lose the Thread: Empowering Long-Horizon LLM Agents with Cognitive Resource Self-Allocation",
+        "score": 7,
+        "id": "2610.40350",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Read, Allocate, Route: Role-Coupled Tokenization for Pixel-Space Generative Transformers",
+        "score": 6,
+        "id": "2610.40647",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.LG",
+          "cs.NE"
+        ]
+      },
+      {
+        "title": "Adaptive search with path-constrained mobile sensors using multi-arm bandits",
+        "score": 5,
+        "id": "2610.40431",
+        "categories": [
+          "cs.RO",
+          "cs.LG",
+          "math.OC"
+        ]
+      },
+      {
+        "title": "Training Foundation Models with a Single Algorithm",
+        "score": 3,
+        "id": "2610.40564",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "On the Fundamental Limits of Prefill-Based Decoding Length Prediction",
+        "score": 4,
+        "id": "2610.40541",
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.IT"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "NECA: Neighbor Event Curve Augmentation for Multi-Horizon ICU Deterioration Prediction",
+        "score": 4,
+        "id": "2610.40420",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Prefix Executability: Evaluating Tool-Using Agents Beyond Final Success",
+        "score": 3,
+        "id": "2610.40444",
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Pre-Crime for Agents, at the Last Second: Probing When a Recruited Agent Gives In",
+        "score": 4,
+        "id": "2610.40588",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-30",
     "report": "reports/2026-10-30.md",
     "sources": "sources/2026-10-30.md",
