@@ -1,5 +1,88 @@
 [
   {
+    "date": "2026-11-01",
+    "report": "reports/2026-11-01.md",
+    "sources": "sources/2026-11-01.md",
+    "focus": [
+      {
+        "title": "Fast and accurate neural triage decoding of ultra-high-rate quantum LDPC codes",
+        "score": 0,
+        "id": "2610.40490",
+        "categories": [
+          "quant-ph",
+          "cs.AI",
+          "cs.IT",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Ramanujan Challenge Results: AI-Assisted Evaluation Pipeline for Multi-Format Proofs",
+        "score": 0,
+        "id": "2610.40551",
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.SC",
+          "math.NT"
+        ]
+      },
+      {
+        "title": "Machine Learning-Based Detection of Mobile Money Scan Messages in Ghana: A Comparative Evaluation of Naive Bayes, Support Vector Machine, and Randon Forest Classifiers",
+        "score": 0,
+        "id": "2610.40544",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "A Unified Hessian-Guided Framework for Post-Training Quantization",
+        "score": 0,
+        "id": "2610.40345",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "TRACER, a time-to-event EHR foundation model for disease detection across health systems",
+        "score": 0,
+        "id": "2610.40536",
+        "categories": [
+          "cs.CE",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "The Precision Wall: An Optimizer-Dependent Boundary for Optimization under Power-Law Measurement Spectra",
+        "score": 0,
+        "id": "2610.40485",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Algebraic World Model: From Exploration to Proofs",
+        "score": 0,
+        "id": "2610.40503",
+        "categories": [
+          "cs.AI",
+          "cs.LO"
+        ]
+      },
+      {
+        "title": "Uncertainty-aware Feedback Loop Diagnosis: integrating reinforcement learning and conformal prediction for reliable wafer defect classification",
+        "score": 0,
+        "id": "2610.40421",
+        "categories": [
+          "cs.LG",
+          "cs.CV"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-10-31",
     "report": "reports/2026-10-31.md",
     "sources": "sources/2026-10-31.md",
