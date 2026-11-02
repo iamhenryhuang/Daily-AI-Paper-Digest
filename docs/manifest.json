@@ -1,5 +1,81 @@
 [
   {
+    "date": "2026-11-02",
+    "report": "reports/2026-11-02.md",
+    "sources": "sources/2026-11-02.md",
+    "focus": [
+      {
+        "title": "Predicting Human-Gain Curves under Local Proxy Optimization from Repeated Ratings",
+        "score": 5,
+        "id": "2610.41114",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "QUAL: Quantile Alignment Improves Zero-Shot Time-Series Foundation Models",
+        "score": 5,
+        "id": "2610.41100",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "ROSTrans: Empirically Benchmarking LLMs for ROS1-to-ROS2 Migration",
+        "score": 5,
+        "id": "2610.41168",
+        "categories": [
+          "cs.SE",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Counterfactual Pairwise Augmentation Improves Small Pointwise LLM Judges",
+        "score": 3,
+        "id": "2610.41149",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "RTL-Interact: Training EDA-Interactive Models for Multi-Task RTL Design",
+        "score": 3,
+        "id": "2610.41225",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Adaptive Uncertainty Quantification on Simplicial Complexes with Conformalized Simplicial Neural Networks",
+        "score": 2,
+        "id": "2610.41166",
+        "categories": [
+          "stat.ML",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "FrontierMat: Benchmarking Language Models at the Frontier of Materials R&D",
+        "score": 2,
+        "id": "2610.41162",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "When AI Investigators Cannot Trust Their Tools: Conflict-Aware Evidence Verification for Cyber Threat Investigation",
+        "score": 2,
+        "id": "2610.41191",
+        "categories": [
+          "cs.CR",
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-01",
     "report": "reports/2026-11-01.md",
     "sources": "sources/2026-11-01.md",
