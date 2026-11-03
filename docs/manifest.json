@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-03",
+    "report": "reports/2026-11-03.md",
+    "sources": "sources/2026-11-03.md",
+    "focus": [
+      {
+        "title": "Change the Funnel, Not Who May Submit: Engineering Peer Review for the Flood",
+        "score": 5,
+        "id": "2611.01076",
+        "categories": [
+          "cs.LG",
+          "cs.CY",
+          "cs.DL"
+        ]
+      },
+      {
+        "title": "HiGenTrans: Hierarchical LLM Knowledge Transfer for Generative Recommendation",
+        "score": 5,
+        "id": "2611.01129",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "World Models Need Not Be Right to Rank Policies Right: Relative Bounds and Audit Limits",
+        "score": 5,
+        "id": "2611.01139",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Forecasting Visitor Demand from Open AI-Camera Counts and Weather: Lessons from Japan for Saudi Heritage Sites",
+        "score": 4,
+        "id": "2611.01033",
+        "categories": [
+          "cs.CY",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "pico-WAM: Evaluating Counterfactual Prediction and Planning Error in a Compact World Action Model",
+        "score": 4,
+        "id": "2611.01039",
+        "categories": [
+          "cs.RO",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Reproducing INP-Former: Reconstructing Intrinsic Normal Prototypes for Industrial Anomaly Detection",
+        "score": 4,
+        "id": "2611.01230",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "CompSkill: Compiling Execution Experience for Skill Retrieval",
+        "score": 2,
+        "id": "2611.01115",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "StreamClarify: Proactive Clarification for Grounded Streaming Video Question Answering",
+        "score": 3,
+        "id": "2611.01263",
+        "categories": [
+          "cs.CV"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-02",
     "report": "reports/2026-11-02.md",
     "sources": "sources/2026-11-02.md",
