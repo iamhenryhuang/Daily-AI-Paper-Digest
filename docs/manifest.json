@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-04",
+    "report": "reports/2026-11-04.md",
+    "sources": "sources/2026-11-04.md",
+    "focus": [
+      {
+        "title": "COSMIO: A Benchmark for Cross-Survey Modality Imputation",
+        "score": 5,
+        "id": "2611.04139",
+        "categories": [
+          "astro-ph.IM",
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Separating Common and Unique Directions for Data-Free Model Merging",
+        "score": 5,
+        "id": "2611.04108",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "GlucoAgent: Personalized Glucose Forecasting from Multimodal Personal Context",
+        "score": 5,
+        "id": "2611.04126",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "RGDM: Robust Graph Diffusion Model",
+        "score": 5,
+        "id": "2611.04146",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "How Risky Is Your Data-Driven Policy?",
+        "score": 5,
+        "id": "2611.04292",
+        "categories": [
+          "stat.ML",
+          "cs.LG",
+          "math.OC"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Where Did the Update Go? Certifying Declared Change Envelopes for Model Updates",
+        "score": 4,
+        "id": "2611.04192",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Constructing a Regional Slang Lexicon for Electricity Demands via Soft-Label Bidirectional Anchoring and Active Learning",
+        "score": 5,
+        "id": "2611.04231",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "IntentGEO: Intent-aware Generative Engine Optimization for Recommendation",
+        "score": 2,
+        "id": "2611.04225",
+        "categories": [
+          "cs.IR",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-03",
     "report": "reports/2026-11-03.md",
     "sources": "sources/2026-11-03.md",
