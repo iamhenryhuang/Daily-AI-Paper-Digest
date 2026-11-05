@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-05",
+    "report": "reports/2026-11-05.md",
+    "sources": "sources/2026-11-05.md",
+    "focus": [
+      {
+        "title": "Flexible Intensities Matter: A Comprehensive Re-evaluation of Hawkes Processes and Neural Temporal Point Processes",
+        "score": 7,
+        "id": "2611.06348",
+        "categories": [
+          "cs.LG",
+          "stat.ML"
+        ]
+      },
+      {
+        "title": "DyPSI: Dynamic Physics Sensing via Joint Field and Sensor-Trajectory Generation",
+        "score": 7,
+        "id": "2611.06280",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Beyond Infraction Scores: Failure-Boundary Profiles for Closed-Loop Evaluation of Driving and Robot Navigation Agents",
+        "score": 7,
+        "id": "2611.06453",
+        "categories": [
+          "cs.RO",
+          "cs.CV",
+          "cs.SE"
+        ]
+      },
+      {
+        "title": "Zero-Shot Coordination among LLM Agents",
+        "score": 7,
+        "id": "2611.06409",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Learning Pseudo-Riemannian Manifolds for Heterophilic Graphs via Graph Signature",
+        "score": 5,
+        "id": "2611.06265",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Conformal Prediction for Distribution-to-Distribution Regression",
+        "score": 4,
+        "id": "2611.06320",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "MA-Mesh: Resilient Multi-Agent Collaboration via Role-based Self-Healing",
+        "score": 5,
+        "id": "2611.06389",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "D3D: Decoupled Diffusion Drafting for Asynchronous Speculative Decoding",
+        "score": 4,
+        "id": "2611.06425",
+        "categories": [
+          "cs.AI",
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-04",
     "report": "reports/2026-11-04.md",
     "sources": "sources/2026-11-04.md",
