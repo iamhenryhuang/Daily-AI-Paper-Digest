@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-06",
+    "report": "reports/2026-11-06.md",
+    "sources": "sources/2026-11-06.md",
+    "focus": [
+      {
+        "title": "Towards Foundation Decision Models: Drex",
+        "score": 5,
+        "id": "2611.07854",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "The Intrusion Pathway: How Non-Evidential Context Degrades Language Model Performance",
+        "score": 5,
+        "id": "2611.07778",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Static Recovery Is Not Dynamic Stability: Dynamics-Aware Benchmarking of Protein Motif Scaffolding",
+        "score": 5,
+        "id": "2611.07723",
+        "categories": [
+          "cs.LG",
+          "q-bio.BM"
+        ]
+      },
+      {
+        "title": "Axis-LoRA: Probing and Adapting Embedding Models for Personal-Memory Retrieval",
+        "score": 5,
+        "id": "2611.07820",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Structure from Collision via Hypothesis-Space Reasoning",
+        "score": 5,
+        "id": "2611.07900",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.GR",
+          "cs.LG",
+          "cs.RO"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Adaptive Semantic Branching: Disagreement-Localized Cross-Trajectory Regeneration for Reasoning Candidate Expansion",
+        "score": 5,
+        "id": "2611.07918",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "RIVER: Evidence-guided multi-agent retrieval for enzyme--reaction discovery",
+        "score": 4,
+        "id": "2611.07757",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "ArcadeDB in Python: An In-Process Multi-Model Database",
+        "score": 4,
+        "id": "2611.07971",
+        "categories": [
+          "cs.DB",
+          "cs.IR"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-05",
     "report": "reports/2026-11-05.md",
     "sources": "sources/2026-11-05.md",
