@@ -1,5 +1,86 @@
 [
   {
+    "date": "2026-11-07",
+    "report": "reports/2026-11-07.md",
+    "sources": "sources/2026-11-07.md",
+    "focus": [
+      {
+        "title": "Module-Aware Optimization for Graph Neural Networks",
+        "score": 7,
+        "id": "2611.08379",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "DART: Domain-Agnostic Residual Transfer for Generalist Anomaly Detection",
+        "score": 7,
+        "id": "2611.08271",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma",
+        "score": 6,
+        "id": "2611.08369",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "GINGER: Spicing Up Graph-Based Vector Search",
+        "score": 4,
+        "id": "2611.08306",
+        "categories": [
+          "cs.IR",
+          "cs.DC"
+        ]
+      },
+      {
+        "title": "RM-VLM: From Natural-Language Task Descriptions to Vision-Grounded Reward Machines",
+        "score": 5,
+        "id": "2611.08308",
+        "categories": [
+          "cs.AI",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Understanding AI from the Inside: The State of Mechanistic Interpretability for AI Safety",
+        "score": 4,
+        "id": "2611.08438",
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "ProQuant: Progressive Quantization-aware Training for Edge MLLMs",
+        "score": 4,
+        "id": "2611.08216",
+        "categories": [
+          "cs.CV",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "SCALE: Real-Time Latent Communication for Cyber-Physical Agents",
+        "score": 4,
+        "id": "2611.08390",
+        "categories": [
+          "cs.RO",
+          "cs.MA"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-06",
     "report": "reports/2026-11-06.md",
     "sources": "sources/2026-11-06.md",
