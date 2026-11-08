@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-08",
+    "report": "reports/2026-11-08.md",
+    "sources": "sources/2026-11-08.md",
+    "focus": [
+      {
+        "title": "From Twisted Facts to Rogue Agents: Can LLMs Reliably Detect Multi-Dimensional Hallucinations?",
+        "score": 0,
+        "id": "2611.08231",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Scientist World: Grow a Research World for AI-Scientists",
+        "score": 0,
+        "id": "2611.08478",
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "ManimCode: Learning Visual Self-Correction for Educational Animation",
+        "score": 0,
+        "id": "2611.08294",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Aligning Policy Encoders with a Shape Teacher",
+        "score": 0,
+        "id": "2611.08275",
+        "categories": [
+          "cs.RO",
+          "cs.AI",
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Failure Prediction and Classification in Vision-Language-Action Models Via Calibrated Latent Probing",
+        "score": 0,
+        "id": "2611.08425",
+        "categories": [
+          "cs.RO",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Multimodal-SEA: Benchmarking AI Agent Security under Multimodal Social Engineering Attacks",
+        "score": 0,
+        "id": "2611.08281",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Trilemma: How Agents choose between Honesty, Confidentiality, and Task Completion",
+        "score": 0,
+        "id": "2611.08312",
+        "categories": [
+          "cs.MA"
+        ]
+      },
+      {
+        "title": "Accepted but Wrong: Silent Failures of LLM Code Repairs after API Migrations",
+        "score": 0,
+        "id": "2611.08269",
+        "categories": [
+          "cs.SE",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-07",
     "report": "reports/2026-11-07.md",
     "sources": "sources/2026-11-07.md",
