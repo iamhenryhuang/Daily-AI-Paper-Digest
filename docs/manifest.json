@@ -1,5 +1,82 @@
 [
   {
+    "date": "2026-11-09",
+    "report": "reports/2026-11-09.md",
+    "sources": "sources/2026-11-09.md",
+    "focus": [
+      {
+        "title": "Global Solar Siting from Geospatial Embeddings",
+        "score": 7,
+        "id": "2611.08831",
+        "categories": [
+          "cs.LG",
+          "cs.CV",
+          "cs.CY"
+        ]
+      },
+      {
+        "title": "Composable Causality: A Toolkit for Systematic Time-Series Causal Discovery and Treatment-Effect Benchmarking",
+        "score": 5,
+        "id": "2611.08918",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Reconstructing LLM Lineage Trees via Fine-Tuning Path Inference",
+        "score": 5,
+        "id": "2611.08866",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Geometry-Aware Score-Repellent Monte Carlo",
+        "score": 5,
+        "id": "2611.08909",
+        "categories": [
+          "stat.ML",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Glyph: An Interpretability Engine for AI-Driven Scientific Discovery in Clinical Data",
+        "score": 4,
+        "id": "2611.08922",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Frame: Form-Restricted Authoring with Model-Based Evaluation",
+        "score": 4,
+        "id": "2611.08921",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "I Think, Therefore I Attack: Evaluating Thought Injection Attacks on Reasoning Agents",
+        "score": 4,
+        "id": "2611.08811",
+        "categories": [
+          "cs.AI",
+          "cs.CR"
+        ]
+      },
+      {
+        "title": "Beyond Truncation? Entailment-Licensed Elision and the Limits of Semantic Preservation in LLM Decoding",
+        "score": 5,
+        "id": "2611.08975",
+        "categories": [
+          "cs.CL"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-08",
     "report": "reports/2026-11-08.md",
     "sources": "sources/2026-11-08.md",
