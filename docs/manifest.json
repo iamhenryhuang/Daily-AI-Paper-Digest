@@ -1,5 +1,88 @@
 [
   {
+    "date": "2026-11-10",
+    "report": "reports/2026-11-10.md",
+    "sources": "sources/2026-11-10.md",
+    "focus": [
+      {
+        "title": "How to \"train\" a surgeon? Benchmarking generalist agents in surgical scene understanding",
+        "score": 7,
+        "id": "2611.11437",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "MCSA: Multi-Cutoff Spectral Aggregation in SO(3) Equivariant GNNs for Interatomic Potentials",
+        "score": 5,
+        "id": "2611.11226",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Spatial Harness: Grounding Spatial Reasoning in Executable World States with Physics Engines",
+        "score": 5,
+        "id": "2611.11344",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "When Credit Turns Against Tools: Transition-Aware Credit Assignment in Agentic Reinforcement Learning",
+        "score": 5,
+        "id": "2611.11330",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Decomposing Earth Embeddings with Sparse Autoencoders",
+        "score": 5,
+        "id": "2611.11398",
+        "categories": [
+          "cs.LG",
+          "cs.CV",
+          "physics.geo-ph"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Do Feature Interactions Break Explainability? Provable Explanations for Any-Order Neural Additive Models",
+        "score": 5,
+        "id": "2611.11224",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CC"
+        ]
+      },
+      {
+        "title": "Robust and Private Swarm Learning via Zero-Knowledge Validator Admission and Consensus Aggregation",
+        "score": 5,
+        "id": "2611.11477",
+        "categories": [
+          "cs.CR",
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Agent Self-Improvement with Frozen Weights: The Added Value and Limits of Failure Traces",
+        "score": 4,
+        "id": "2611.11342",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-09",
     "report": "reports/2026-11-09.md",
     "sources": "sources/2026-11-09.md",
