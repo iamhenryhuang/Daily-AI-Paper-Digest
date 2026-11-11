@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-11",
+    "report": "reports/2026-11-11.md",
+    "sources": "sources/2026-11-11.md",
+    "focus": [
+      {
+        "title": "SLIC: Reinforcement Fine-Tuning Small LMs for Multi-Turn Analog Circuit Optimization",
+        "score": 7,
+        "id": "2611.13452",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Evaluating Compositional Generalization in Transformers: The Role of Composition Equivalence and Module Coverage",
+        "score": 5,
+        "id": "2611.13498",
+        "categories": [
+          "cs.LG",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Reasoning-Aware Relational Representation Learning for Open-Vocabulary Scene Graph Generation",
+        "score": 5,
+        "id": "2611.13496",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Online-Adaptive Fuzzy Cognitive Maps for Neuro-symbolic Financial Forecasting",
+        "score": 3,
+        "id": "2611.13388",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "How Hyperbolic Are Hyperbolic Vision-Language Models?",
+        "score": 5,
+        "id": "2611.13384",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "The Dose Makes the Poison: Exposure-Aware Evaluation of Generative Drug Design",
+        "score": 3,
+        "id": "2611.13398",
+        "categories": [
+          "q-bio.QM",
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Mobile AI Factory: Building Specialized Language Models for Your Mobile Device",
+        "score": 2,
+        "id": "2611.13509",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Inherited Weights: Measuring the Tokenization Premium and the Sovereignty Cost of Language Models for the Global South",
+        "score": 2,
+        "id": "2611.13441",
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.CY"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-10",
     "report": "reports/2026-11-10.md",
     "sources": "sources/2026-11-10.md",
