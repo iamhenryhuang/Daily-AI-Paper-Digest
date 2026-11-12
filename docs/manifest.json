@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-12",
+    "report": "reports/2026-11-12.md",
+    "sources": "sources/2026-11-12.md",
+    "focus": [
+      {
+        "title": "Don't Just Trust Your Memory: Evidence-Linked Memory Reduces Memory-Induced Degradation in LLM Agents",
+        "score": 7,
+        "id": "2611.14320",
+        "categories": [
+          "cs.AI",
+          "cs.MA"
+        ]
+      },
+      {
+        "title": "DnNP: Denoising Input Uncertainty in Neural Processes",
+        "score": 7,
+        "id": "2611.14424",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Causal Concept Explanations for Deep Neural Models",
+        "score": 5,
+        "id": "2611.14407",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Emergent Biological Capabilities in a Foundation Model for Molecular Interactions",
+        "score": 3,
+        "id": "2611.14504",
+        "categories": [
+          "cs.LG",
+          "q-bio.BM"
+        ]
+      },
+      {
+        "title": "Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents",
+        "score": 3,
+        "id": "2611.14511",
+        "categories": [
+          "cs.LG",
+          "q-bio.QM"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Re-Search: Dissecting LLM Ideation Through a Two-Player Questioning Game",
+        "score": 5,
+        "id": "2611.14487",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "TorchCurves: Differentiable Parametric Curves",
+        "score": 4,
+        "id": "2611.14516",
+        "categories": [
+          "cs.LG",
+          "stat.ML"
+        ]
+      },
+      {
+        "title": "Forward-Value Discretization: Faster Stochastic Diffusion Sampling Without High-Order Approximation",
+        "score": 4,
+        "id": "2611.14328",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "stat.ML"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-11",
     "report": "reports/2026-11-11.md",
     "sources": "sources/2026-11-11.md",
