@@ -1,5 +1,86 @@
 [
   {
+    "date": "2026-11-13",
+    "report": "reports/2026-11-13.md",
+    "sources": "sources/2026-11-13.md",
+    "focus": [
+      {
+        "title": "Overcoming the Resolution Limit: Significance-Aware Regularization for Intersectional Fairness",
+        "score": 5,
+        "id": "2611.15427",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Faithful in Steps: Improving Generalization and Citation in RAG via Query Decomposition",
+        "score": 5,
+        "id": "2611.15538",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Testing Conversation Preservation Across LLM APIs: A Rule-Based Oracle for Detecting Silent Information Loss",
+        "score": 5,
+        "id": "2611.15543",
+        "categories": [
+          "cs.SE",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Verifier Choice is a Benchmark Design Variable: Auditing Structural Counting Evaluation in Text-to-Image Models",
+        "score": 5,
+        "id": "2611.15433",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Multi-head Quantum Neural Networks: Replacing Transformer Blocks with NISQ Modules inside a 30-Billion-Parameter LLM",
+        "score": 5,
+        "id": "2611.15250",
+        "categories": [
+          "quant-ph",
+          "cs.AI",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Right Answers, Inconsistent Evidence: Source-Level Counterfactual Auditing of Large Audio-Language Models",
+        "score": 4,
+        "id": "2611.15463",
+        "categories": [
+          "cs.SD",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "DETER: Suppression During Pretraining for Tamper Resistance",
+        "score": 4,
+        "id": "2611.15479",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "SimRec: Learning to Search, Ask, and Recommend from Simulated Interaction",
+        "score": 4,
+        "id": "2611.15426",
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.IR"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-12",
     "report": "reports/2026-11-12.md",
     "sources": "sources/2026-11-12.md",
