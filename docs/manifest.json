@@ -1,5 +1,89 @@
 [
   {
+    "date": "2026-11-14",
+    "report": "reports/2026-11-14.md",
+    "sources": "sources/2026-11-14.md",
+    "focus": [
+      {
+        "title": "AgentSSL: Can MLE Agents Leverage Unlabeled Data?",
+        "score": 5,
+        "id": "2611.17323",
+        "categories": [
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Unbundling Multimodal Vision Encoding",
+        "score": 3,
+        "id": "2611.17334",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Actor, Judge, or Teacher? Understanding Decision Models in Long-Horizon Agents",
+        "score": 5,
+        "id": "2611.17167",
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Auditing AI peer reviewers: a benchmark on real scientific papers",
+        "score": 5,
+        "id": "2611.17052",
+        "categories": [
+          "cs.CL",
+          "astro-ph.IM",
+          "cs.AI",
+          "cs.DL"
+        ]
+      },
+      {
+        "title": "Bellman Contraction under MMD: A Unified Framework",
+        "score": 5,
+        "id": "2611.17116",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Consistent Video-to-Video Translation via Explicit Correspondences",
+        "score": 5,
+        "id": "2611.17298",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.GR",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Maximizing Capacity Utilization of LoRA Adapters for Mitigating the Learning-Forgetting Trade-off",
+        "score": 4,
+        "id": "2611.17191",
+        "categories": [
+          "cs.LG",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Discovering Effective Agent Memory Designs through Program Evolution",
+        "score": 4,
+        "id": "2611.17068",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-13",
     "report": "reports/2026-11-13.md",
     "sources": "sources/2026-11-13.md",
