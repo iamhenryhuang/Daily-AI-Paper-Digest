@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-15",
+    "report": "reports/2026-11-15.md",
+    "sources": "sources/2026-11-15.md",
+    "focus": [
+      {
+        "title": "ISLA: A Coordinate-Free, Measure-Weighted Transformer for Boundary-Driven PDEs",
+        "score": 0,
+        "id": "2611.17141",
+        "categories": [
+          "cs.LG",
+          "cs.CE",
+          "math-ph",
+          "physics.flu-dyn"
+        ]
+      },
+      {
+        "title": "An Invariant Neural-Network Eddy-Viscosity Closure with Iterative Solver Coupling for Molten Salt Fast Reactor Thermal-Hydraulics",
+        "score": 0,
+        "id": "2611.17067",
+        "categories": [
+          "physics.flu-dyn",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Your Vision Foundation Model Is Secretly an EEG Foundation Model",
+        "score": 0,
+        "id": "2611.17031",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "When Both Sides Adapt: The Challenges of Evaluating Interactive LLM Systems",
+        "score": 0,
+        "id": "2611.17239",
+        "categories": [
+          "stat.ME",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Internalizing Investment Mandates: A Neurosymbolic RL Approach to Portfolio Allocation",
+        "score": 0,
+        "id": "2611.17329",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "LiveGeo: Benchmarking Geographic Agents in Continuously Evolving Worlds",
+        "score": 0,
+        "id": "2611.17267",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Symmetry in Time: A Representation Theory of Linear Recurrent Memory",
+        "score": 0,
+        "id": "2611.17162",
+        "categories": [
+          "cs.LG",
+          "cs.NE",
+          "math.RT"
+        ]
+      },
+      {
+        "title": "Ballad: Bandit-Based LLM Routing for Automated Heuristic Discovery",
+        "score": 0,
+        "id": "2611.17241",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-14",
     "report": "reports/2026-11-14.md",
     "sources": "sources/2026-11-14.md",
