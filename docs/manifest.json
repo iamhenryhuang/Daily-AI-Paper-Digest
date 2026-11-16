@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-16",
+    "report": "reports/2026-11-16.md",
+    "sources": "sources/2026-11-16.md",
+    "focus": [
+      {
+        "title": "More Genes, Faster Inference: Efficient Large-Panel Spatial Transcriptomics Prediction from Histology",
+        "score": 7,
+        "id": "2611.17899",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "q-bio.QM"
+        ]
+      },
+      {
+        "title": "DySENSE: Dynamic Spatiotemporal ENergy Synthesis and Emulation with Satellite Imagery",
+        "score": 7,
+        "id": "2611.17878",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "AI Reviews Are Biased Towards the Appendix",
+        "score": 7,
+        "id": "2611.17811",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Logically Consistent Accurate Forecasts",
+        "score": 5,
+        "id": "2611.17735",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Provable Cross-Modal Transfer of Hierarchical Concept Structure in CLIP Embeddings",
+        "score": 5,
+        "id": "2611.17671",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Antidistillation is Cheap: Lightweight Distillation-Resistance via Stylistic Corruption",
+        "score": 5,
+        "id": "2611.17772",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "GDP.xlsx: Benchmarking Frontier Models on Professional Workbooks",
+        "score": 4,
+        "id": "2611.17766",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Electrocardiographic Imaging via Posterior Sampling under Operator Discrepancy",
+        "score": 3,
+        "id": "2611.17851",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-15",
     "report": "reports/2026-11-15.md",
     "sources": "sources/2026-11-15.md",
