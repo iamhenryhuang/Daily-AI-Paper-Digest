@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-11-17",
+    "report": "reports/2026-11-17.md",
+    "sources": "sources/2026-11-17.md",
+    "focus": [
+      {
+        "title": "Newton-PINet: A fast physics-informed neural network with Newton linearization for meta-learning nonlinear PDEs",
+        "score": 7,
+        "id": "2611.20609",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CE",
+          "physics.comp-ph"
+        ]
+      },
+      {
+        "title": "EVIDENT: Evaluating Evidence Grounding in GUI Agents",
+        "score": 7,
+        "id": "2611.20488",
+        "categories": [
+          "cs.AI",
+          "cs.HC"
+        ]
+      },
+      {
+        "title": "MSAR: Next-Scale Autoregressive Forecasting for Time Series via Modular Multi-Scale Decoupling",
+        "score": 7,
+        "id": "2611.20714",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "AdMem: Expectation-Grounded Procedural Memory for Long-Horizon Task-Solving Agents",
+        "score": 5,
+        "id": "2611.20605",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Model Immunization Beyond Condition Numbers: The Importance of Plateau Regions",
+        "score": 5,
+        "id": "2611.20472",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Instrumenting Failure: Scoring Language Model Agents at Every Decision Node in Imperfect-Information Games",
+        "score": 5,
+        "id": "2611.20644",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Separating learning from search and feedback in budgeted inverse design of periodic unit cells",
+        "score": 5,
+        "id": "2611.20480",
+        "categories": [
+          "cs.CE",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Contrastive Activation-Guided Zeroth-Order Preference Optimisation for Memory-Efficient LLM Alignment",
+        "score": 5,
+        "id": "2611.20635",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-16",
     "report": "reports/2026-11-16.md",
     "sources": "sources/2026-11-16.md",
