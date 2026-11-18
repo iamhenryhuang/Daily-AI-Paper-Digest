@@ -1,5 +1,87 @@
 [
   {
+    "date": "2026-11-18",
+    "report": "reports/2026-11-18.md",
+    "sources": "sources/2026-11-18.md",
+    "focus": [
+      {
+        "title": "The Kernel Reality Check: Benchmarking and Distilling Efficient Attention at Scale",
+        "score": 7,
+        "id": "2611.22947",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "SEAM: Computer-Use Agents Know the Harm Between Screens, and Commit It Anyway",
+        "score": 2,
+        "id": "2611.22971",
+        "categories": [
+          "cs.CR",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Is model self-assessment enough for diverse LVLM ensembles?",
+        "score": 2,
+        "id": "2611.22956",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Retrieval-Augmented Correction for Generalist Medical Image Segmentation",
+        "score": 4,
+        "id": "2611.23189",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "FrameRouter: Frame Budget Routing for Long-Video Understanding on Video-MME-v2 and Beyond",
+        "score": 5,
+        "id": "2611.23055",
+        "categories": [
+          "cs.AI",
+          "cs.CV",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "An inexact stochastic variance-reduced gradient method for constrained convex finite-sum optimization",
+        "score": 3,
+        "id": "2611.23221",
+        "categories": [
+          "math.OC",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Mind the Gap: A Deployed Multi-Agent System for Documentation Maintenance",
+        "score": 3,
+        "id": "2611.23142",
+        "categories": [
+          "cs.SE",
+          "cs.AI",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "What Does a Bias Head Measure? Non-Identifiability in Head-Level Bias Attribution",
+        "score": 3,
+        "id": "2611.23218",
+        "categories": [
+          "cs.CL",
+          "cs.LG"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-17",
     "report": "reports/2026-11-17.md",
     "sources": "sources/2026-11-17.md",
