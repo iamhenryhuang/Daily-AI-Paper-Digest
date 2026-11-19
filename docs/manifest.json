@@ -1,5 +1,89 @@
 [
   {
+    "date": "2026-11-19",
+    "report": "reports/2026-11-19.md",
+    "sources": "sources/2026-11-19.md",
+    "focus": [
+      {
+        "title": "Openhagen Worlds: Calibrated Environments for Measuring and Training Scientific Discovery Agents",
+        "score": 5,
+        "id": "2611.24711",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Decomposing SGD Dynamics in Neural Networks: Teacher-Induced Spikes and Variance Inflation",
+        "score": 5,
+        "id": "2611.24908",
+        "categories": [
+          "stat.ML",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Prognosis Without Prediction: The Intrinsic Geometry of Survival",
+        "score": 4,
+        "id": "2611.24799",
+        "categories": [
+          "cs.LG",
+          "q-bio.QM"
+        ]
+      },
+      {
+        "title": "Hypnos: A Dual-Phase End-to-End Platform for Scalable Continual Learning at the Edge",
+        "score": 4,
+        "id": "2611.24637",
+        "categories": [
+          "cs.AR",
+          "cs.AI",
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "A$^3$Bench: Compositional Reasoning over Aggressive Interactions in Videos",
+        "score": 4,
+        "id": "2611.24762",
+        "categories": [
+          "cs.CV"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Does the Action Matter? Probing Action-Conditioned Semantic Forecasting as a World Model for Autonomous Driving",
+        "score": 4,
+        "id": "2611.24840",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.LG",
+          "cs.RO"
+        ]
+      },
+      {
+        "title": "Auditing black-box clinical prediction models with a large language model through queries alone: a blinded test with planted flaws",
+        "score": 4,
+        "id": "2611.24877",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "H3Remover: Reinforcing Video Object Removal without Paired Data",
+        "score": 4,
+        "id": "2611.24633",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-18",
     "report": "reports/2026-11-18.md",
     "sources": "sources/2026-11-18.md",
