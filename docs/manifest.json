@@ -1,5 +1,83 @@
 [
   {
+    "date": "2026-11-20",
+    "report": "reports/2026-11-20.md",
+    "sources": "sources/2026-11-20.md",
+    "focus": [
+      {
+        "title": "Collision-Free Is Not Enough: Passage-Conditioned Navigation for Wheeled-Legged Robots",
+        "score": 7,
+        "id": "2611.25788",
+        "categories": [
+          "cs.RO",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "A Sparse Low-Rank Biclique Decomposition for Graphs",
+        "score": 5,
+        "id": "2611.25826",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "EgoWitness: Benchmarking Instance-Level Spatial Memory and Reasoning in Egocentric Video Streams",
+        "score": 2,
+        "id": "2611.25849",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "From AI Surrogate to Engineering Tool: Toward Production Use of Fiber-Orientation Prediction in Crash CAE",
+        "score": 5,
+        "id": "2611.25991",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Harnessing Medical Visual-Language Models with Agentic Evidence Management",
+        "score": 2,
+        "id": "2611.25840",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "ContextRenderer: Dynamic-Context Video Generation for Interactive Game Worlds",
+        "score": 2,
+        "id": "2611.25838",
+        "categories": [
+          "cs.CV",
+          "cs.GR"
+        ]
+      },
+      {
+        "title": "Beyond Alignment: Whitening Geometry, Profile Synthesis, and Heterogeneous Ensembles for Cross-Environment WiFi Action Recognition",
+        "score": 5,
+        "id": "2611.25831",
+        "categories": [
+          "cs.LG",
+          "eess.SP"
+        ]
+      },
+      {
+        "title": "Fast-JEPA: Advancing the Success-Latency Frontier for Latent World Models",
+        "score": 2,
+        "id": "2611.25927",
+        "categories": [
+          "cs.RO",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-19",
     "report": "reports/2026-11-19.md",
     "sources": "sources/2026-11-19.md",
