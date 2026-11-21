@@ -1,5 +1,80 @@
 [
   {
+    "date": "2026-11-21",
+    "report": "reports/2026-11-21.md",
+    "sources": "sources/2026-11-21.md",
+    "focus": [
+      {
+        "title": "Mamba Flow Matching Neural Processes: Linear-Time Inference for Irregularly Observed Spatial Fields",
+        "score": 7,
+        "id": "2611.26355",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "EgoCaptioner: Towards Comprehensive and Fine-Grained Egocentric Video Captioning",
+        "score": 7,
+        "id": "2611.26380",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "A CPU Inside an LLM: Zero-Gradient Compilation of Exact Circuits into Pretrained Weights",
+        "score": 5,
+        "id": "2611.26450",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Coda-DaVinci: Reimagining Video Generation with Code2Video",
+        "score": 5,
+        "id": "2611.26595",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Active Feature Acquisition by Distilling an Oracle Teacher",
+        "score": 5,
+        "id": "2611.26598",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Training LLMs to Follow Reasoning Instructions with Minimal Edits",
+        "score": 5,
+        "id": "2611.26342",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "One Framework to Diagnose Them All: A Stratified Benchmark for Bengali LLM Hallucination",
+        "score": 5,
+        "id": "2611.26336",
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "AutoMaster: Autonomous Post-Training by Making the Same Model a Better Teacher",
+        "score": 5,
+        "id": "2611.26510",
+        "categories": [
+          "cs.CL"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-20",
     "report": "reports/2026-11-20.md",
     "sources": "sources/2026-11-20.md",
