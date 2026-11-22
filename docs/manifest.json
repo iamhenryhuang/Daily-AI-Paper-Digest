@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-22",
+    "report": "reports/2026-11-22.md",
+    "sources": "sources/2026-11-22.md",
+    "focus": [
+      {
+        "title": "Sequential Anytime Valid Tests for Efficient Inference-Time Alignment",
+        "score": 0,
+        "id": "2611.26413",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Exact Bayesian layers via characteristic functions",
+        "score": 0,
+        "id": "2611.26426",
+        "categories": [
+          "stat.ML",
+          "cs.LG",
+          "stat.CO"
+        ]
+      },
+      {
+        "title": "Monte Carlo Pass Search for Setpieces",
+        "score": 0,
+        "id": "2611.26464",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Bayesian optimization on amortized search space",
+        "score": 0,
+        "id": "2611.26459",
+        "categories": [
+          "stat.ML",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Scaling classical hardware for accurate real-time quantum error correction",
+        "score": 0,
+        "id": "2611.26447",
+        "categories": [
+          "quant-ph",
+          "cs.AR",
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "LLM GerryMandering: Separating Interactions from Additive Effects in LLM Audits",
+        "score": 0,
+        "id": "2611.26538",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Risk-Controlled Test-Time Adaptation for Vision-Language-Action Models",
+        "score": 0,
+        "id": "2611.26438",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "GLiDE: A Fast, Calibrated Decision Model Distilled from Reasoning Teachers",
+        "score": 0,
+        "id": "2611.26509",
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-21",
     "report": "reports/2026-11-21.md",
     "sources": "sources/2026-11-21.md",
