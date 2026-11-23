@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-23",
+    "report": "reports/2026-11-23.md",
+    "sources": "sources/2026-11-23.md",
+    "focus": [
+      {
+        "title": "Where Delay Compensation Belongs in a Decentralized Mean-Field-Game Swarm with a Control-Barrier Safety Filter",
+        "score": 5,
+        "id": "2611.27540",
+        "categories": [
+          "cs.RO",
+          "cs.MA",
+          "eess.SY"
+        ]
+      },
+      {
+        "title": "On the Limits of Observability for Evaluating Coverage in Machine Unlearning",
+        "score": 5,
+        "id": "2611.27543",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Verifying and Strengthening Neural Tangent Kernel Theory",
+        "score": 5,
+        "id": "2611.27487",
+        "categories": [
+          "cs.LG",
+          "stat.ML"
+        ]
+      },
+      {
+        "title": "Epistemic Social Learning: Latent Behavioral Structure under Endogenous Multi-Agent Interaction",
+        "score": 5,
+        "id": "2611.27545",
+        "categories": [
+          "cs.MA",
+          "cs.GT"
+        ]
+      },
+      {
+        "title": "PRISM: Validation-Free Online Batch Selection for LLM Fine-Tuning via Preconditioned Conic Ghost Matching",
+        "score": 2,
+        "id": "2611.27578",
+        "categories": [
+          "cs.LG"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Leakage-Free Is Not Confounder-Free: What a Patient-Level Split Cannot Certify About a Medical Imaging Benchmark",
+        "score": 4,
+        "id": "2611.27585",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Breaking the Barrier of Hard Samples: A Data-Centric Approach to Synthetic Data for Medical Tasks",
+        "score": 3,
+        "id": "2611.27511",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "PromptTTSD: Controllable Text to Spoken Dialogue Synthesis with Open-Ended Text Descriptions",
+        "score": 4,
+        "id": "2611.27601",
+        "categories": [
+          "cs.SD",
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-22",
     "report": "reports/2026-11-22.md",
     "sources": "sources/2026-11-22.md",
