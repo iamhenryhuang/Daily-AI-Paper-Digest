@@ -1,5 +1,91 @@
 [
   {
+    "date": "2026-11-25",
+    "report": "reports/2026-11-25.md",
+    "sources": "sources/2026-11-25.md",
+    "focus": [
+      {
+        "title": "Embodied AI Fails the Mirror Test: How a Simple Mirror Breaks Robot Policies",
+        "score": 7,
+        "id": "2611.33010",
+        "categories": [
+          "cs.CV",
+          "cs.AI",
+          "cs.RO"
+        ]
+      },
+      {
+        "title": "Online V-Learning with Adaptive Longitudinal Data",
+        "score": 5,
+        "id": "2611.32947",
+        "categories": [
+          "stat.ML",
+          "cs.LG",
+          "math.ST",
+          "stat.AP",
+          "stat.ME"
+        ]
+      },
+      {
+        "title": "Auditing the Judge: Human-Derived Bias Discovery, Quantification, and Mitigation in LLM Judges",
+        "score": 5,
+        "id": "2611.33065",
+        "categories": [
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "\"I Do Intend to Deliver\": Will LLMs Run a Marketplace Advance-Fee Scam?",
+        "score": 4,
+        "id": "2611.32957",
+        "categories": [
+          "cs.SI",
+          "cs.AI",
+          "cs.CL",
+          "cs.CR"
+        ]
+      },
+      {
+        "title": "On the Creation of Object-Centric Event Logs from Patient Journeys",
+        "score": 4,
+        "id": "2611.33074",
+        "categories": [
+          "cs.DB",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Draft Calibration for Speculative Decoding: Accelerating LLM Serving by Matching Draft and Target Distributions",
+        "score": 4,
+        "id": "2611.33111",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "Latent Merger: Latent-Space Composition of Hypernetwork-Generated LoRAs",
+        "score": 3,
+        "id": "2611.33048",
+        "categories": [
+          "cs.LG",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "RecordRoute: Auditing Agent Failures with Localization-Guided Diagnosis",
+        "score": 2,
+        "id": "2611.33022",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-24",
     "report": "reports/2026-11-24.md",
     "sources": "sources/2026-11-24.md",
