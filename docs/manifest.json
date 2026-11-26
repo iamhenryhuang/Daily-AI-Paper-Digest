@@ -1,5 +1,84 @@
 [
   {
+    "date": "2026-11-26",
+    "report": "reports/2026-11-26.md",
+    "sources": "sources/2026-11-26.md",
+    "focus": [
+      {
+        "title": "Shape-Aware Three-Way Merge for RDF Knowledge Graphs: The schema defines the conflict: an implementation and evaluation",
+        "score": 7,
+        "id": "2611.34870",
+        "categories": [
+          "cs.DB",
+          "cs.AI",
+          "cs.SE"
+        ]
+      },
+      {
+        "title": "When to Trust a PFN: Detecting Harmful Shift in Tabular Foundation Models",
+        "score": 5,
+        "id": "2611.34767",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Stranger Things: When Objects Appear Without Their Typical Neighbors",
+        "score": 5,
+        "id": "2611.34881",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Diverse Alternative Reasoning Traces for Hard Math Problems",
+        "score": 5,
+        "id": "2611.34928",
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Probing Visual Idiosyncrasies in Text-to-Image Models",
+        "score": 4,
+        "id": "2611.34843",
+        "categories": [
+          "cs.CV",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Towards Closing the Performance Gap in Cross-Modal Place Recognition",
+        "score": 4,
+        "id": "2611.34877",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "Routeability Before Routing: Routeability Audit Protocol (RAP) and RouteabilityBench for Audited LLM Model Selection",
+        "score": 3,
+        "id": "2611.34825",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "What Is a Theory Worth to an LLM Solver? Measuring, Inducing, and Merging Theories in Context",
+        "score": 3,
+        "id": "2611.34751",
+        "categories": [
+          "cs.AI"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-25",
     "report": "reports/2026-11-25.md",
     "sources": "sources/2026-11-25.md",
