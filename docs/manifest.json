@@ -1,5 +1,90 @@
 [
   {
+    "date": "2026-11-27",
+    "report": "reports/2026-11-27.md",
+    "sources": "sources/2026-11-27.md",
+    "focus": [
+      {
+        "title": "TASK Memory: Beyond Text-Only Memory with Activation Steering and Knowledge Editing against Memory Hallucination",
+        "score": 0,
+        "id": "2611.34762",
+        "categories": [
+          "cs.AI"
+        ]
+      },
+      {
+        "title": "What a Drop Reveals: Sim-to-Real Material Estimation for Deformable Objects from Video",
+        "score": 0,
+        "id": "2611.34894",
+        "categories": [
+          "cs.CV",
+          "cs.GR",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Guidance as Variance Matching",
+        "score": 0,
+        "id": "2611.34801",
+        "categories": [
+          "cs.CV",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "A Survey of Security, Privacy, and Ethics of Large Language Models in Telecom",
+        "score": 0,
+        "id": "2611.34868",
+        "categories": [
+          "cs.CR",
+          "cs.AI",
+          "cs.CY"
+        ]
+      },
+      {
+        "title": "From NP-Hardness to Exact Tractability Through Sample Abundance",
+        "score": 0,
+        "id": "2611.34734",
+        "categories": [
+          "cs.LG",
+          "cs.CC",
+          "math.OC"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Provably Efficient Offline Discounted Reinforcement Learning under Recursive Entropic Risk",
+        "score": 0,
+        "id": "2611.34840",
+        "categories": [
+          "cs.LG",
+          "eess.SY",
+          "stat.ML"
+        ]
+      },
+      {
+        "title": "Bigger Model or Bigger Table? How Much Backbone a Chorus N-gram Module Replaces",
+        "score": 0,
+        "id": "2611.34725",
+        "categories": [
+          "cs.CL",
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "When Every Rollout Fails: Splicing Learner-Conditioned Options into Long-Horizon Agent RL",
+        "score": 0,
+        "id": "2611.34777",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-26",
     "report": "reports/2026-11-26.md",
     "sources": "sources/2026-11-26.md",
