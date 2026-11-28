@@ -1,5 +1,83 @@
 [
   {
+    "date": "2026-11-28",
+    "report": "reports/2026-11-28.md",
+    "sources": "sources/2026-11-28.md",
+    "focus": [
+      {
+        "title": "FineDex: Bridging Fine-Grained Human-Object Interaction Generation to Dexterous Humanoid Manipulation",
+        "score": 0,
+        "id": "2611.34884",
+        "categories": [
+          "cs.RO",
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "SOLVE: Sparse, Ordered Keyposes Make LLM Agents Versatile and Efficient Robot Manipulator",
+        "score": 0,
+        "id": "2611.34750",
+        "categories": [
+          "cs.RO",
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "DFly2: Turbocharging Long-Context Speculative Decoding by Sharing the Target's Sparsity",
+        "score": 0,
+        "id": "2611.34776",
+        "categories": [
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "When the Proxy Is Wrong: Mismatch-Corrected Bandits for Adaptive Data Sampling",
+        "score": 0,
+        "id": "2611.34707",
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL"
+        ]
+      },
+      {
+        "title": "Not all world models can doubt: how training objective and architecture shape epistemic uncertainty in JEPA and RSSM world models",
+        "score": 0,
+        "id": "2611.34830",
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ]
+      }
+    ],
+    "also": [
+      {
+        "title": "Robust Recourse under Causal Graph Ambiguity",
+        "score": 0,
+        "id": "2611.34723",
+        "categories": [
+          "cs.LG"
+        ]
+      },
+      {
+        "title": "Tracking Any Point with Agentic Visual Reasoning",
+        "score": 0,
+        "id": "2611.34943",
+        "categories": [
+          "cs.CV"
+        ]
+      },
+      {
+        "title": "ProbFaS: Probabilistic Video Frame Selection for MLLMs via Multi-Fidelity Calibration",
+        "score": 0,
+        "id": "2611.34903",
+        "categories": [
+          "cs.CV"
+        ]
+      }
+    ]
+  },
+  {
     "date": "2026-11-27",
     "report": "reports/2026-11-27.md",
     "sources": "sources/2026-11-27.md",
